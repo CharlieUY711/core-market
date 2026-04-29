@@ -50,7 +50,7 @@ export default function EditorPage() {
       const { data: { user } } = await supabase.auth.getUser();
       const folder = user?.id || "public";
       const vNum   = store.versionCount + 1;
-      const baseName = store.originalName.replace(/\.[^.]+$/, "");
+      const baseName = (store.originalName || "imagen").replace(/\.[^.]+$/, "");
       const fileName = `${baseName}_V${vNum}.png`;
       const path     = `${folder}/${fileName}`;
 
