@@ -17,6 +17,8 @@ interface MediaItem {
   duracion_seg?: number;
   thumbnail_path?: string;
   status: "uploading" | "ready" | "failed";
+  categoria: "articulo" | "documento" | "otro";
+  etiquetas: string[];
   created_at: string;
   url?: string;
 }
@@ -76,6 +78,9 @@ export default function AdminBiblioteca({
   const [uploads, setUploads]   = useState<UploadItem[]>([]);
   const [filter, setFilter]     = useState<"all" | "imagen" | "video">("all");
   const [search, setSearch]     = useState("");
+  const [filterCat, setFilterCat] = useState<"all"|"articulo"|"documento"|"otro">("all");
+  const [uploadCat, setUploadCat] = useState<"articulo"|"documento"|"otro">("articulo");
+  const [uploadTags, setUploadTags] = useState("");
   const [toast, setToast]       = useState<{ text: string; ok: boolean } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const videoRefs = useRef<Map<string, HTMLVideoElement>>(new Map());
@@ -217,6 +222,8 @@ export default function AdminBiblioteca({
           duracion_seg:  duracion,
           thumbnail_path: thumbPath,
           status:        "ready",
+          categoria:     uploadCat,
+          etiquetas:     uploadTags.split(",").map(t => t.trim()).filter(Boolean),
         });
 
         if (dbError) throw dbError;
@@ -273,9 +280,11 @@ export default function AdminBiblioteca({
   };
 
   const filtered = items.filter(i => {
-    const matchType = filter === "all" || i.tipo === filter;
-    const matchSearch = !search || i.nombre.toLowerCase().includes(search.toLowerCase());
-    return matchType && matchSearch;
+    const matchType   = filter === "all" || i.tipo === filter;
+    const matchSearch = !search || i.nombre.toLowerCase().includes(search.toLowerCase()) ||
+      (i.etiquetas || []).some(t => t.toLowerCase().includes(search.toLowerCase()));
+    const matchCat    = filterCat === "all" || i.categoria === filterCat;
+    return matchType && matchSearch && matchCat;
   });
 
   const selImages = items.filter(i => selected.has(i.id) && i.tipo === "imagen").length;
@@ -347,6 +356,19 @@ export default function AdminBiblioteca({
             </div>
             <input ref={inputRef} type="file" multiple accept="image/*,video/*"
               style={{ display: "none" }} onChange={e => handleFiles(e.target.files)} />
+            <div style={{ display:"flex", gap:"4px" }}>
+              {(["all","articulo","documento","otro"] as const).map(c => (
+                <button key={c} onClick={() => setFilterCat(c)} style={{
+                  padding:"0.4rem 0.6rem", borderRadius:7, fontSize:"0.75rem",
+                  border:`1.5px solid ${filterCat===c ? BLUE : "#E5E7EB"}`,
+                  background: filterCat===c ? `rgba(15,52,96,.08)` : "#fff",
+                  color: filterCat===c ? BLUE : "#6B7280",
+                  fontWeight: filterCat===c ? 700 : 400, cursor:"pointer",
+                }}>
+                  {c==="all"?"Todas":c==="articulo"?"🛍 Artículo":c==="documento"?"📄 Doc":"📎 Otro"}
+                </button>
+              ))}
+            </div>
             <button onClick={() => inputRef.current?.click()} style={{
               padding: "0.45rem 1rem", background: ACCENT, color: "#fff",
               border: "none", borderRadius: 8, fontWeight: 700, fontSize: "0.85rem", cursor: "pointer",
@@ -433,6 +455,15 @@ export default function AdminBiblioteca({
                       <div style={{ fontSize: "10px", color: "#9CA3AF" }}>
                         {fmtSize(item.size_bytes)} · {fmtDate(item.created_at)}
                       </div>
+                      {item.etiquetas?.length > 0 && (
+                        <div style={{ display:"flex", flexWrap:"wrap", gap:"2px", marginTop:"2px" }}>
+                          {item.etiquetas.slice(0,3).map(t => (
+                            <span key={t} style={{ fontSize:"9px", padding:"1px 4px",
+                              background:"rgba(15,52,96,.08)", color:BLUE,
+                              borderRadius:3, fontWeight:600 }}>#{t}</span>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     {/* Acciones */}
@@ -489,6 +520,38 @@ export default function AdminBiblioteca({
             </div>
             <input ref={inputRef} type="file" multiple accept="image/*,video/*"
               style={{ display: "none" }} onChange={e => handleFiles(e.target.files)} />
+          </div>
+
+          {/* Opciones de subida */}
+          <div style={{ display:"flex", gap:"0.75rem", flexWrap:"wrap" }}>
+            <div style={{ flex:1, minWidth:160 }}>
+              <label style={{ fontSize:"0.78rem", fontWeight:700, color:"#374151", display:"block", marginBottom:"4px" }}>Categoría</label>
+              <div style={{ display:"flex", gap:"4px" }}>
+                {(["articulo","documento","otro"] as const).map(c => (
+                  <button key={c} onClick={() => setUploadCat(c)} style={{
+                    flex:1, padding:"0.4rem 0.4rem", borderRadius:7, fontSize:"0.75rem",
+                    border:`1.5px solid ${uploadCat===c ? ACCENT : "#E5E7EB"}`,
+                    background: uploadCat===c ? `rgba(255,122,0,.08)` : "#fff",
+                    color: uploadCat===c ? ACCENT : "#6B7280",
+                    fontWeight: uploadCat===c ? 700 : 400, cursor:"pointer",
+                  }}>
+                    {c==="articulo"?"🛍 Artículo":c==="documento"?"📄 Doc":"📎 Otro"}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div style={{ flex:2, minWidth:200 }}>
+              <label style={{ fontSize:"0.78rem", fontWeight:700, color:"#374151", display:"block", marginBottom:"4px" }}>
+                Etiquetas <span style={{ fontWeight:400, color:"#9CA3AF" }}>(separadas por coma)</span>
+              </label>
+              <input
+                value={uploadTags}
+                onChange={e => setUploadTags(e.target.value)}
+                placeholder="ej: verano, electro, oferta"
+                style={{ width:"100%", padding:"0.45rem 0.75rem", border:"1.5px solid #E5E7EB",
+                  borderRadius:8, fontSize:"0.85rem", outline:"none", boxSizing:"border-box" as const }}
+              />
+            </div>
           </div>
 
           {/* Lista de uploads */}
