@@ -23,12 +23,10 @@ const BG_COLORS = [
 ];
 
 const TOOLS = [
-  { id:"select",  icon:"↖", title:"Seleccionar" },
-  { id:"move",    icon:"✥", title:"Mover" },
-  { id:"crop",    icon:"⊡", title:"Recortar" },
-  { id:"stretch", icon:"↔", title:"Estirar" },
-  { id:"scale",   icon:"⤡", title:"Escalar prop." },
-  { id:"cut",     icon:"✂", title:"Cortar" },
+  { id:"select-rect", icon:"▭", title:"Selección rectangular" },
+  { id:"select-circ", icon:"◯", title:"Selección circular" },
+  { id:"select-free", icon:"⌖", title:"Selección libre" },
+  { id:"cut",         icon:"✂", title:"Cortar selección" },
 ];
 
 export default function TransformPanel() {
@@ -213,12 +211,10 @@ export default function TransformPanel() {
         </div>
         {activeTool && (
           <div style={{ marginTop:"6px", fontSize:"10px", color:"#9CA3AF", padding:"4px 8px", background:"#F9FAFB", borderRadius:"6px" }}>
-            {activeTool === "select"  && "Arrastrá para seleccionar un área"}
-            {activeTool === "move"    && "Arrastrá la imagen para moverla"}
-            {activeTool === "crop"    && "Se muestra la guía de recorte en el canvas"}
-            {activeTool === "stretch" && "Arrastrá los bordes para estirar"}
-            {activeTool === "scale"   && "Arrastrá las esquinas para escalar"}
-            {activeTool === "cut"     && "Cortá la selección actual"}
+            {activeTool === "select-rect" && "Arrastrá para seleccionar área rectangular"}
+            {activeTool === "select-circ" && "Arrastrá para seleccionar área circular"}
+            {activeTool === "select-free" && "Dibujá libremente el área de selección"}
+            {activeTool === "cut"         && "Recortá la selección actual"}
           </div>
         )}
       </div>
