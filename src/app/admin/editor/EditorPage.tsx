@@ -52,14 +52,6 @@ export default function EditorPage() {
       store.filter !== "none" || (store.bgColor !== "transparent" && store.bgColor !== "#FFFFFF");
   };
 
-
-
-
-
-
-
-
-
   const handleGrabar = async () => {
     const canvas = editCanvasRef.current;
     if (!canvas || !store.src) return;
@@ -88,7 +80,7 @@ export default function EditorPage() {
       const newImg = new Image();
       newImg.onload = () => {
         store.bumpVersion(newImg, canvasDataUrl);
-        const kb = Math.round(blob.size/1024);
+        const kb = Math.round(blob.size / 1024);
         setSaveMsg(`✓ ${fileName} · ${kb > 1024 ? (kb/1024).toFixed(1)+"MB" : kb+"KB"}`);
         setTimeout(() => setSaveMsg(""), 4000);
       };
@@ -98,7 +90,6 @@ export default function EditorPage() {
     } finally {
       setSaving(false);
     }
-  };
   };
 
   return (
@@ -117,7 +108,7 @@ export default function EditorPage() {
         <div style={{ display:"flex", alignItems:"center", gap:"6px" }}>
           {store.src && <span style={{ fontSize:"11px", color:"#9CA3AF" }}>{store.src.width}x{store.src.height}px</span>}
           {store.versionCount > 0 && <span style={{ fontSize:"10px", color:GREEN, fontWeight:600 }}>V{store.versionCount}</span>}
-          {(["+ ","- ","Fit"]).map((l,i) => (
+          {(["+ ","- ","Fit"] as const).map((l,i) => (
             <button key={i} onClick={() => {
               if(i===0) store.set("zoom",Math.min(store.zoom*1.25,5));
               else if(i===1) store.set("zoom",Math.max(store.zoom/1.25,.1));
@@ -127,19 +118,11 @@ export default function EditorPage() {
         </div>
       </div>
 
-      {/* Cuerpo: Original | Controles | Editado */}
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 210px 1fr", flex:1, overflow:"hidden", gap:"6px" }}>
+      {/* Cuerpo */}
+      <div style={{ display:"grid", gridTemplateColumns:"200px 1fr 1fr 180px", flex:1, overflow:"hidden", gap:"6px" }}>
 
-        {/* Canvas Original */}
-        <div style={{ display:"flex", flexDirection:"column", background:"#F4F5F7", border:"1.5px solid #E5E7EB", borderRadius:"12px", overflow:"hidden" }}>
-          <div style={{ height:"30px", display:"flex", alignItems:"center", justifyContent:"center", borderBottom:"1px solid #E5E7EB", background:"#fff", flexShrink:0 }}>
-            <span style={{ fontSize:"10px", fontWeight:600, color:"#6B7280", padding:"2px 10px", border:"1px solid #E5E7EB", borderRadius:"20px" }}>Original</span>
-          </div>
-          <OriginalCanvas />
-        </div>
-
-        {/* Panel controles central */}
-        <div style={{ background:"#fff", border:"1.5px solid #E5E7EB", borderRadius:"12px", display:"flex", flexDirection:"column", overflow:"hidden" }}>
+        {/* Panel izquierdo */}
+        <aside style={{ background:"#fff", border:"1.5px solid #E5E7EB", borderRadius:"12px", display:"flex", flexDirection:"column", overflow:"hidden" }}>
           <div style={{ display:"flex", borderBottom:"1px solid #F3F4F6", flexShrink:0 }}>
             {navBtn("adjust","Ajustes",ACCENT)}
             {navBtn("transform","Forma",BLUE)}
@@ -153,16 +136,34 @@ export default function EditorPage() {
           <div style={{ borderTop:"1px solid #F3F4F6", flexShrink:0 }}>
             <HistoryPanel />
           </div>
+        </aside>
+
+        {/* Canvas Original */}
+        <div style={{ display:"flex", flexDirection:"column", background:"#F4F5F7", border:"1.5px solid #E5E7EB", borderRadius:"12px", overflow:"hidden" }}>
+          <div style={{ height:"30px", display:"flex", alignItems:"center", justifyContent:"center", borderBottom:"1px solid #E5E7EB", background:"#fff", flexShrink:0 }}>
+            <span style={{ fontSize:"10px", fontWeight:600, color:"#6B7280", padding:"2px 10px", border:"1px solid #E5E7EB", borderRadius:"20px" }}>Original</span>
+          </div>
+          <OriginalCanvas />
         </div>
 
         {/* Canvas Editado */}
         <div style={{ display:"flex", flexDirection:"column", background:"#F4F5F7", border:`1.5px solid ${ACCENT}`, borderRadius:"12px", overflow:"hidden" }}>
           <div style={{ height:"30px", display:"flex", alignItems:"center", justifyContent:"space-between", padding:"0 10px", borderBottom:"1px solid #E5E7EB", background:"#fff", flexShrink:0 }}>
             <span style={{ fontSize:"10px", fontWeight:600, background:ACCENT, color:"#fff", padding:"2px 10px", borderRadius:"20px" }}>Editado</span>
-            <span style={{ fontSize:"10px", color:"#9CA3AF" }}>zoom {Math.round(store.zoom*100)}%</span>
+            <span style={{ fontSize:"10px", color:"#9CA3AF" }}>1200×1200 · zoom {Math.round(store.zoom*100)}%</span>
           </div>
-          <EditCanvas canvasRef={editCanvasRef} onRender={() => { setRenderCount(n => n+1); const c = editCanvasRef.current; if(c && store.src) { const usePng = store.bgColor === "transparent"; try { const d = c.toDataURL(usePng?"image/png":"image/jpeg", 0.92); const b = Math.round((d.length-22)*3/4); setSizeEst(b>1024*1024?(b/1024/1024).toFixed(1)+"MB":Math.round(b/1024)+"KB"); } catch{} } }} />
-          {/* Barra inferior con Grabar */}
+          <EditCanvas canvasRef={editCanvasRef} onRender={() => {
+            setRenderCount(n => n+1);
+            const c = editCanvasRef.current;
+            if (c && store.src) {
+              try {
+                const usePng = store.bgColor === "transparent";
+                const d = c.toDataURL(usePng ? "image/png" : "image/jpeg", 0.92);
+                const b = Math.round((d.length - 22) * 3 / 4);
+                setSizeEst(b > 1024*1024 ? `${(b/1024/1024).toFixed(1)}MB` : `${Math.round(b/1024)}KB`);
+              } catch {}
+            }
+          }} />
           <div style={{ height:"40px", display:"flex", alignItems:"center", justifyContent:"space-between", padding:"0 10px", borderTop:"1px solid #E5E7EB", background:"#fff", flexShrink:0 }}>
             <span style={{ fontSize:"10px", color: saveMsg.startsWith("Error") ? "#EF4444" : saveMsg.startsWith("Sin") ? "#F59E0B" : GREEN }}>
               {saveMsg || (store.src ? `${sizeEst ? sizeEst+" · " : ""}JPG · render #${renderCount}` : "")}
@@ -181,6 +182,29 @@ export default function EditorPage() {
             </button>
           </div>
         </div>
+
+        {/* Panel derecho */}
+        <aside style={{ background:"#fff", border:"1.5px solid #E5E7EB", borderRadius:"12px", display:"flex", flexDirection:"column", overflow:"hidden" }}>
+          <div style={{ padding:"10px 12px", borderBottom:"1px solid #F3F4F6" }}>
+            <div style={{ fontSize:"10px", fontWeight:600, color:"#9CA3AF", textTransform:"uppercase", letterSpacing:".08em", marginBottom:"8px" }}>Exportar</div>
+            <div style={{ fontSize:"11px", color:"#6B7280", lineHeight:2 }}>
+              <div>Formato: {store.bgColor === "transparent" ? "PNG" : "JPG"}</div>
+              <div>Resolución: 1200×1200</div>
+              {sizeEst && <div>Tamaño: ~{sizeEst}</div>}
+            </div>
+          </div>
+          <div style={{ padding:"10px 12px" }}>
+            <div style={{ fontSize:"10px", fontWeight:600, color:"#9CA3AF", textTransform:"uppercase", letterSpacing:".08em", marginBottom:"8px" }}>Info</div>
+            {store.src ? (
+              <div style={{ fontSize:"11px", color:"#6B7280", lineHeight:2 }}>
+                <div>Original: {store.src.width}×{store.src.height}px</div>
+                <div>Zoom: {Math.round(store.zoom*100)}%</div>
+                <div>Filtro: {store.filter}</div>
+                {store.bgRemoved && <div style={{ color:"#6B3CFF" }}>✦ Fondo removido</div>}
+              </div>
+            ) : <span style={{ fontSize:"11px", color:"#9CA3AF" }}>Sin imagen</span>}
+          </div>
+        </aside>
       </div>
     </div>
   );
