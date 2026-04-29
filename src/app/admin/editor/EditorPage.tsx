@@ -62,7 +62,7 @@ export default function EditorPage() {
 
       const newImg = new Image();
       newImg.onload = () => {
-        store.bumpVersion(newImg);
+        store.bumpVersion(newImg, publicUrl + "?t=" + Date.now());
         setSaveMsg(`Grabado como ${fileName}`);
         setTimeout(() => setSaveMsg(""), 3000);
       };

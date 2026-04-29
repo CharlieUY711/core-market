@@ -2,18 +2,18 @@
 
 export default function OriginalCanvas() {
   const store = useEditorStore();
+  const dataUrl = store.originalDataUrl;
 
   const loadFile = (f: File) => {
     const reader = new FileReader();
     reader.onload = ev => {
+      const url = ev.target?.result as string;
       const img = new Image();
-      img.onload = () => store.setSrc(img, f.name);
-      img.src = ev.target?.result as string;
+      img.onload = () => store.setSrc(img, url, f.name);
+      img.src = url;
     };
     reader.readAsDataURL(f);
   };
-
-  const imgSrc = store.originalSrc?.src || null;
 
   return (
     <div
@@ -22,12 +22,19 @@ export default function OriginalCanvas() {
       onDragLeave={e => { e.currentTarget.style.outline = ""; }}
       onDrop={e => { e.preventDefault(); e.currentTarget.style.outline = ""; const f = e.dataTransfer.files[0]; if (f?.type.startsWith("image/")) loadFile(f); }}
     >
-      {imgSrc ? (
-        <img
-          src={imgSrc}
-          alt="original"
-          style={{ maxWidth:"100%", maxHeight:"100%", objectFit:"contain", borderRadius:"6px", display:"block" }}
-        />
+      {dataUrl ? (
+        <>
+          <img
+            src={dataUrl}
+            alt="original"
+            style={{ maxWidth:"100%", maxHeight:"100%", objectFit:"contain", borderRadius:"6px", display:"block" }}
+          />
+          {store.versionCount > 0 && (
+            <div style={{ position:"absolute", top:"8px", right:"8px", background:"#1DC878", color:"#fff", fontSize:"10px", fontWeight:700, padding:"2px 8px", borderRadius:"20px" }}>
+              V{store.versionCount}
+            </div>
+          )}
+        </>
       ) : (
         <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:"12px", color:"#888", cursor:"pointer" }}
           onClick={() => document.getElementById("emi-file-input")?.click()}>
@@ -43,11 +50,6 @@ export default function OriginalCanvas() {
             onClick={e => { e.stopPropagation(); document.getElementById("emi-file-input")?.click(); }}>
             Subir imagen
           </button>
-        </div>
-      )}
-      {store.versionCount > 0 && imgSrc && (
-        <div style={{ position:"absolute", top:"8px", right:"8px", background:"#1DC878", color:"#fff", fontSize:"10px", fontWeight:700, padding:"2px 8px", borderRadius:"20px" }}>
-          V{store.versionCount}
         </div>
       )}
       <input id="emi-file-input" type="file" accept="image/*" style={{ display:"none" }}

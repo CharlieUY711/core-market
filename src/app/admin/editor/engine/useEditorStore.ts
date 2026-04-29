@@ -8,6 +8,9 @@ export interface EditorState {
   flipH: boolean; flipV: boolean;
   zoom: number; filter: string;
   src: HTMLImageElement | null;
+  originalDataUrl: string | null;
+  originalName: string;
+  versionCount: number;
   bgRemoved: boolean;
   history: { label: string; snap: string }[];
   histIdx: number;
@@ -15,37 +18,45 @@ export interface EditorState {
 
 export interface EditorActions {
   set: (key: keyof EditorState, value: any) => void;
-  setSrc: (img: HTMLImageElement) => void;
+  setSrc: (img: HTMLImageElement, dataUrl: string, name?: string) => void;
   saveHistory: (label: string) => void;
   undo: () => void;
   redo: () => void;
   reset: () => void;
+  bumpVersion: (img: HTMLImageElement, dataUrl: string) => void;
 }
 
 const DEFAULTS = {
-  brightness:0,contrast:0,exposure:0,saturation:0,temperature:0,tint:0,
-  sharpness:0,blur:0,rotation:0,fineRotation:0,flipH:false,flipV:false,
-  zoom:1,filter:"none",src:null,bgRemoved:false,history:[],histIdx:-1
+  brightness:0, contrast:0, exposure:0, saturation:0, temperature:0, tint:0,
+  sharpness:0, blur:0, rotation:0, fineRotation:0, flipH:false, flipV:false,
+  zoom:1, filter:"none", bgRemoved:false, history:[], histIdx:-1
 };
 
 export const useEditorStore = create<EditorState & EditorActions>((s, g) => ({
   ...DEFAULTS,
+  src: null, originalDataUrl: null, originalName: "imagen", versionCount: 0,
 
   set: (key, value) => s({ [key]: value } as any),
 
-  setSrc: (img) => {
-    s({ ...DEFAULTS, src: img, history: [], histIdx: -1 });
+  setSrc: (img, dataUrl, name = "imagen") => {
+    s({ ...DEFAULTS, src: img, originalDataUrl: dataUrl, originalName: name, versionCount: 0 });
     setTimeout(() => g().saveHistory("Imagen cargada"), 0);
+  },
+
+  bumpVersion: (img, dataUrl) => {
+    const count = g().versionCount + 1;
+    s({ ...DEFAULTS, src: img, originalDataUrl: dataUrl, versionCount: count });
+    setTimeout(() => g().saveHistory(`Version V${count} grabada`), 0);
   },
 
   saveHistory: (label) => {
     const state = g();
     const snap = JSON.stringify({
-      brightness:state.brightness,contrast:state.contrast,exposure:state.exposure,
-      saturation:state.saturation,temperature:state.temperature,tint:state.tint,
-      sharpness:state.sharpness,blur:state.blur,rotation:state.rotation,
-      fineRotation:state.fineRotation,flipH:state.flipH,flipV:state.flipV,
-      zoom:state.zoom,filter:state.filter
+      brightness:state.brightness, contrast:state.contrast, exposure:state.exposure,
+      saturation:state.saturation, temperature:state.temperature, tint:state.tint,
+      sharpness:state.sharpness, blur:state.blur, rotation:state.rotation,
+      fineRotation:state.fineRotation, flipH:state.flipH, flipV:state.flipV,
+      zoom:state.zoom, filter:state.filter
     });
     let hist = state.history.slice(0, state.histIdx + 1);
     hist = [...hist, { label, snap }].slice(-20);
@@ -55,25 +66,21 @@ export const useEditorStore = create<EditorState & EditorActions>((s, g) => ({
   undo: () => {
     const { histIdx, history } = g();
     if (histIdx <= 0) return;
-    const newIdx = histIdx - 1;
-    const snap = JSON.parse(history[newIdx].snap);
-    s({ ...snap, histIdx: newIdx });
+    const snap = JSON.parse(history[histIdx - 1].snap);
+    s({ ...snap, histIdx: histIdx - 1 });
   },
 
   redo: () => {
     const { histIdx, history } = g();
     if (histIdx >= history.length - 1) return;
-    const newIdx = histIdx + 1;
-    const snap = JSON.parse(history[newIdx].snap);
-    s({ ...snap, histIdx: newIdx });
+    const snap = JSON.parse(history[histIdx + 1].snap);
+    s({ ...snap, histIdx: histIdx + 1 });
   },
 
   reset: () => {
-    s({
-      brightness:0,contrast:0,exposure:0,saturation:0,temperature:0,tint:0,
-      sharpness:0,blur:0,rotation:0,fineRotation:0,flipH:false,flipV:false,
-      zoom:1,filter:"none"
-    });
+    s({ brightness:0, contrast:0, exposure:0, saturation:0, temperature:0, tint:0,
+        sharpness:0, blur:0, rotation:0, fineRotation:0, flipH:false, flipV:false,
+        zoom:1, filter:"none" });
     setTimeout(() => g().saveHistory("Reset"), 0);
   }
 }));
