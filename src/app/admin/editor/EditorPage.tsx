@@ -6,7 +6,7 @@ import AdjustPanel    from "./components/AdjustPanel";
 import TransformPanel from "./components/TransformPanel";
 import EffectsPanel   from "./components/EffectsPanel";
 import HistoryPanel   from "./components/HistoryPanel";
-import { supabase }   from "../../utils/supabase/client";
+import { supabase }   from "../../../utils/supabase/client";
 
 const ACCENT = "#FF7A00";
 const BLUE   = "#0F3460";
