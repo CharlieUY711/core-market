@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef } from "react";
+﻿import { useEffect, useRef, useCallback } from "react";
 import { useEditorStore } from "../engine/useEditorStore";
 
 export default function OriginalCanvas() {
@@ -6,26 +6,41 @@ export default function OriginalCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef   = useRef<HTMLDivElement>(null);
 
-  const draw = () => {
+  const draw = useCallback(() => {
     const src = store.originalSrc;
     const c   = canvasRef.current;
     const w   = wrapRef.current;
     if (!src || !c || !w) return;
-    requestAnimationFrame(() => {
-      const maxW  = w.clientWidth  - 24;
-      const maxH  = w.clientHeight - 24;
-      if (!maxW || !maxH) return;
-      const scale = Math.min(maxW / src.width, maxH / src.height, 1);
-      c.width  = Math.round(src.width  * scale);
-      c.height = Math.round(src.height * scale);
-      const ctx = c.getContext("2d")!;
-      ctx.clearRect(0, 0, c.width, c.height);
-      ctx.filter = "none";
-      ctx.drawImage(src, 0, 0, c.width, c.height);
-    });
-  };
+    const maxW = w.clientWidth  - 24;
+    const maxH = w.clientHeight - 24;
+    if (maxW <= 0 || maxH <= 0) return;
+    const scale = Math.min(maxW / src.width, maxH / src.height, 1);
+    c.width  = Math.round(src.width  * scale);
+    c.height = Math.round(src.height * scale);
+    const ctx = c.getContext("2d")!;
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.drawImage(src, 0, 0, c.width, c.height);
+  }, [store.originalSrc]);
 
-  useEffect(() => { draw(); }, [store.originalSrc, store.versionCount]);
+  // Dibujar cuando cambia la imagen
+  useEffect(() => {
+    if (!store.originalSrc) return;
+    // Intentar inmediatamente y con delays
+    draw();
+    const t1 = setTimeout(draw, 50);
+    const t2 = setTimeout(draw, 200);
+    const t3 = setTimeout(draw, 500);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+  }, [store.originalSrc, store.versionCount, draw]);
+
+  // ResizeObserver para redibujar si cambia el tamaño
+  useEffect(() => {
+    const w = wrapRef.current;
+    if (!w) return;
+    const ro = new ResizeObserver(() => draw());
+    ro.observe(w);
+    return () => ro.disconnect();
+  }, [draw]);
 
   const loadFile = (f: File) => {
     const reader = new FileReader();
