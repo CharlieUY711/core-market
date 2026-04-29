@@ -1,4 +1,5 @@
 ﻿import { useState, useEffect } from "react";
+import SelectorMediaArticulo from "../components/SelectorMediaArticulo";
 import { useOutletContext, useNavigate } from "react-router";
 import { supabase } from "../../../utils/supabase/client";
 
@@ -30,6 +31,8 @@ export default function AdminArticulos() {
   const [subcatId,     setSubcatId]     = useState("");
   const [tipo,         setTipo]         = useState<"market"|"secondhand">("market");
   const [activo,       setActivo]       = useState(true);
+  const [imagenes,     setImagenes]     = useState<string[]>([]);
+  const [videoUrls,    setVideoUrls]    = useState<string[]>([]);
 
   const notify = (text: string, ok = true) => {
     setToast({text, ok});
@@ -70,7 +73,9 @@ export default function AdminArticulos() {
         precio:              parseFloat(precio),
         precio_original:     precioOrig ? parseFloat(precioOrig) : null,
         stock:               parseInt(stock) || 1,
-        imagen_principal:    imagenUrl.trim() || null,
+        imagen_principal:    imagenes[0] || imagenUrl.trim() || null,
+        imagenes:            imagenes.length > 0 ? imagenes : null,
+        videos:              videoUrls.length > 0 ? videoUrls : null,
         departamento_id:     deptoId || null,
         departamento_nombre: depto?.nombre || null,
         status:              activo ? "active" : "inactive",
@@ -84,6 +89,7 @@ export default function AdminArticulos() {
       // Reset form
       setNombre(""); setDescripcion(""); setPrecio(""); setPrecioOrig("");
       setStock("1"); setImagenUrl(""); setDeptoId(""); setCatId(""); setSubcatId("");
+      setImagenes([]); setVideoUrls([]);
     } catch (e: any) {
       notify(e.message || "Error al guardar", false);
     } finally {
