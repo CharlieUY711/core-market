@@ -11,7 +11,7 @@ export interface EditorState {
   originalDataUrl: string | null;
   originalName: string;
   versionCount: number;
-  bgRemoved: boolean;
+  bgRemoved: boolean; offsetX: number; offsetY: number; scaleX: number; scaleY: number;
   bgColor: string;
   aspectRatio: string | null;
   activeTool: string | null;
@@ -32,8 +32,7 @@ export interface EditorActions {
 const DEFAULTS = {
   brightness:0, contrast:0, exposure:0, saturation:0, temperature:0, tint:0,
   sharpness:0, blur:0, rotation:0, fineRotation:0, flipH:false, flipV:false,
-  zoom:1, filter:"none", bgRemoved:false, bgColor:"transparent",
-  aspectRatio:null, activeTool:null, history:[], histIdx:-1
+  zoom:1, filter:"none", bgRemoved:false, bgColor:"transparent", aspectRatio:null, activeTool:null, offsetX:0, offsetY:0, scaleX:1, scaleY:1, history:[], histIdx:-1
 };
 
 export const useEditorStore = create<EditorState & EditorActions>((s, g) => ({
