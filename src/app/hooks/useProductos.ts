@@ -172,7 +172,7 @@ export function useProductos() {
             img: a.imagen_principal || (a.imagenes?.[0]?.url) || '',
             d: a.departamento_nombre || 'Sin categoría',
             n: \\,
-            p: a.precio ? Number(a.precio).toLocaleString('es-UY') : '0',
+            n: a.nombre + (a.condicion ? ' · ' + a.condicion : ''),
             og: a.precio_original ? Number(a.precio_original).toLocaleString('es-UY') : '',
             c: a.condicion ? condMap[a.condicion] || 3 : 3,
             desc: a.descripcion || '',
