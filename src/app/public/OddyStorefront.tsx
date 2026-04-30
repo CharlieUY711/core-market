@@ -2785,7 +2785,7 @@ export default function OddyStorefront() {
       {/* ── FOOTER MÓVIL ── */}
       <footer className="oddy-mobile-footer">
         <div className="oddy-mobile-footer-logo">
-          <svg viewBox="0 0 200 120" width="auto" height="40" style={{ display: 'block' }}>
+          <svg viewBox="0 0 200 120" width="67" height="40" style={{ display: 'block' }}>
             <g fill="none" stroke="#ffffff" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" transform="translate(0, 5)">
               <path d="M 100 10 L 130 25 L 130 55 L 100 70 L 70 55 L 70 25 Z" />
               <path d="M 70 55 L 100 70 L 100 100 L 70 115 L 40 100 L 40 70 Z" />

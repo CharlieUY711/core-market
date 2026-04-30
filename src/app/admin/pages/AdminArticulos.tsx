@@ -102,9 +102,11 @@ export default function AdminArticulos() {
     try {
       const tabla = "articulos";
       const depto = deptos.find(d => d.id === deptoId);
-      const { data:{ user } } = await supabase.auth.getUser();
+      const authResp = await supabase.auth.getUser();
+      const userId = authResp.data?.user?.id;
+      if (!userId) throw new Error("Sesión expirada, iniciá sesión nuevamente");
       const { error } = await supabase.from(tabla).insert({
-        vendedor_id:         user?.id,
+        vendedor_id:         userId,
         tipo,
         nombre:              nombre.trim(),
         descripcion:         descripcion.trim(),
