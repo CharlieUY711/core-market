@@ -31,7 +31,7 @@ const STATUS_CFG: Record<string, { label: string; bg: string; color: string }> =
   inactive: { label: "Inactivo", bg: "#fee2e2", color: "#991b1b" },
 };
 
-export default function AdminPublicaciones() {
+export default function AdminMisPublicaciones() {
   const navigate = useNavigate();
   const [articulos, setArticulos]   = useState<Articulo[]>([]);
   const [loading, setLoading]       = useState(true);
