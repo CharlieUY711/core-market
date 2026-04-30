@@ -481,7 +481,7 @@ export default function AdminPublicaciones() {
                       <tr key={a.id+"-exp"}>
                         <td colSpan={99} style={{ padding:0, borderBottom:"2px solid #F3F4F6" }}>
                           <div style={{ padding:"1.25rem", background:"#F9FAFB",
-                            display:"grid", gridTemplateColumns:"1.2fr 1fr 1fr", gap:"1.25rem" }}>
+                            display:"grid", gridTemplateColumns:"1fr 1fr", gap:"1.25rem" }}>
 
                             {/* INFO / EDICIÓN INLINE */}
                             <div>
@@ -545,102 +545,130 @@ export default function AdminPublicaciones() {
                               )}
                             </div>
 
-                            {/* MÉTRICAS */}
-                            <div>
-                              <div style={{ fontSize:"0.72rem", fontWeight:700, color:"#9CA3AF",
-                                textTransform:"uppercase", marginBottom:"0.75rem" }}>Métricas</div>
-                              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"0.5rem" }}>
-                                {[
-                                  { label:"Impresiones", value:a.impresiones||0 },
-                                  { label:"Clicks",      value:a.clicks||0 },
-                                  { label:"CTR",         value:(a.impresiones?(((a.clicks||0)/a.impresiones)*100).toFixed(1):0)+"%" },
-                                  { label:"Ranking",     value:a.ranking_score?Number(a.ranking_score).toFixed(3):"—" },
-                                  { label:"Rating",      value:a.rating_promedio?Number(a.rating_promedio).toFixed(1)+" ★":"—" },
-                                  { label:"Reseñas",     value:a.rating_count||0 },
-                                ].map(m => (
-                                  <div key={m.label} style={{ background:"#fff", borderRadius:8,
-                                    padding:"0.4rem 0.6rem", border:"1px solid #E5E7EB" }}>
-                                    <div style={{ fontSize:"9px", color:"#9CA3AF", textTransform:"uppercase" }}>{m.label}</div>
-                                    <div style={{ fontWeight:700, color:"#374151" }}>{m.value}</div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
+                            {/* COLUMNA DERECHA: ACCIONES + PUBLICAR EN + MÉTRICAS */}
+                            <div style={{ display:"flex", flexDirection:"column", gap:"1rem" }}>
 
-                            {/* ACCIONES */}
-                            <div>
-                              <div style={{ fontSize:"0.72rem", fontWeight:700, color:"#9CA3AF",
-                                textTransform:"uppercase", marginBottom:"0.75rem" }}>Acciones</div>
+                              {/* Estilo título compartido */}
+                              {(() => {
+                                const tit: React.CSSProperties = {
+                                  fontSize:"0.7rem", fontWeight:700, color:"#9CA3AF",
+                                  textTransform:"uppercase", letterSpacing:".08em", marginBottom:"0.6rem"
+                                };
+                                const grid3: React.CSSProperties = {
+                                  display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"5px"
+                                };
+                                const grid4: React.CSSProperties = {
+                                  display:"grid", gridTemplateColumns:"1fr 1fr 1fr 1fr", gap:"4px"
+                                };
+                                const btn = (bg: string, tc: string, border: string): React.CSSProperties => ({
+                                  padding:"0.45rem 0.25rem", fontSize:"0.75rem", fontWeight:700,
+                                  border:`1.5px solid ${border}`, borderRadius:7,
+                                  background:bg, color:tc, cursor:"pointer"
+                                });
+                                return (
+                                  <>
+                                    {/* ACCIONES */}
+                                    <div>
+                                      <div style={tit}>Acciones</div>
+                                      <div style={{ ...grid3, marginBottom:"5px" }}>
+                                        <button onClick={()=>navigate("/admin/catalog/articulos")}
+                                          style={btn(color,"#fff",color)}>＋ Nuevo</button>
+                                        <button onClick={()=>clonar(a)}
+                                          style={btn("none",BLUE,BLUE)}>⎘ Clonar</button>
+                                        <button onClick={()=>isEd?setEditing(null):startEdit(a)}
+                                          style={btn(isEd?BLUE:"none",isEd?"#fff":BLUE,BLUE)}>✏ Editar</button>
+                                      </div>
+                                      <div style={grid3}>
+                                        <button onClick={()=>cambiarStatus(a.id,a.status==="active"?"paused":"active")}
+                                          style={btn("none","#854d0e","#F59E0B")}>
+                                          {a.status==="active"?"⏸ Pausar":"▶ Activar"}
+                                        </button>
+                                        <button onClick={()=>archivar(a.id)}
+                                          style={btn("none","#6B7280","#6B7280")}>📦 Archivar</button>
+                                        <button onClick={()=>eliminar(a.id)}
+                                          style={btn("none","#EF4444","#EF4444")}>🗑 Eliminar</button>
+                                      </div>
+                                    </div>
 
-                              {/* Fila 1: Nuevo, Clonar, Editar */}
-                              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"5px", marginBottom:"5px" }}>
-                                <button onClick={()=>navigate("/admin/catalog/articulos")} style={{
-                                  padding:"0.45rem 0.25rem", fontSize:"0.75rem", fontWeight:700,
-                                  border:`1.5px solid ${color}`, borderRadius:7,
-                                  background:color, color:"#fff", cursor:"pointer" }}>＋ Nuevo</button>
-                                <button onClick={()=>clonar(a)} style={{
-                                  padding:"0.45rem 0.25rem", fontSize:"0.75rem", fontWeight:700,
-                                  border:`1.5px solid ${BLUE}`, borderRadius:7,
-                                  background:"none", color:BLUE, cursor:"pointer" }}>⎘ Clonar</button>
-                                <button onClick={()=>isEd?setEditing(null):startEdit(a)} style={{
-                                  padding:"0.45rem 0.25rem", fontSize:"0.75rem", fontWeight:700,
-                                  border:`1.5px solid ${BLUE}`, borderRadius:7,
-                                  background:isEd?BLUE:"none", color:isEd?"#fff":BLUE, cursor:"pointer" }}>✏ Editar</button>
-                              </div>
+                                    {/* PUBLICAR EN */}
+                                    <div>
+                                      <div style={tit}>Publicar en</div>
+                                      <div style={{ ...grid4, marginBottom:"4px" }}>
+                                        {[
+                                          {icon:"🟡",label:"ML",    c:"#FFE600",tc:"#333"},
+                                          {icon:"🔵",label:"Meta",  c:"#1877F2",tc:"#fff"},
+                                          {icon:"🟢",label:"WA",    c:"#25D366",tc:"#fff"},
+                                          {icon:"⚙", label:"Custom",c:"#6B7280",tc:"#fff"},
+                                        ].map(s=>(
+                                          <button key={s.label} style={{
+                                            padding:"0.4rem 0.1rem",fontSize:"10px",fontWeight:700,
+                                            border:`1.5px solid ${s.c}`,borderRadius:6,
+                                            background:s.c,color:s.tc,cursor:"pointer"}}>
+                                            {s.icon} {s.label}
+                                          </button>
+                                        ))}
+                                      </div>
+                                      <div style={grid4}>
+                                        {[
+                                          {icon:"🟡",label:"Ver ML"},
+                                          {icon:"🔵",label:"Ver Meta"},
+                                          {icon:"🟢",label:"Ver WA"},
+                                          {icon:"🌐",label:"Mi web"},
+                                        ].map(s=>(
+                                          <button key={s.label} style={{
+                                            padding:"0.4rem 0.1rem",fontSize:"10px",fontWeight:600,
+                                            border:"1.5px solid #E5E7EB",borderRadius:6,
+                                            background:"#fff",color:"#6B7280",cursor:"pointer"}}>
+                                            {s.icon} {s.label}
+                                          </button>
+                                        ))}
+                                      </div>
+                                    </div>
 
-                              {/* Fila 2: Pausar/Activar, Archivar, Eliminar */}
-                              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"5px", marginBottom:"5px" }}>
-                                <button onClick={()=>cambiarStatus(a.id, a.status==="active"?"paused":"active")} style={{
-                                  padding:"0.45rem 0.25rem", fontSize:"0.75rem", fontWeight:700,
-                                  border:"1.5px solid #F59E0B", borderRadius:7,
-                                  background:"none", color:"#854d0e", cursor:"pointer" }}>
-                                  {a.status==="active"?"⏸ Pausar":"▶ Activar"}
-                                </button>
-                                <button onClick={()=>archivar(a.id)} style={{
-                                  padding:"0.45rem 0.25rem", fontSize:"0.75rem", fontWeight:700,
-                                  border:"1.5px solid #6B7280", borderRadius:7,
-                                  background:"none", color:"#6B7280", cursor:"pointer" }}>📦 Archivar</button>
-                                <button onClick={()=>eliminar(a.id)} style={{
-                                  padding:"0.45rem 0.25rem", fontSize:"0.75rem", fontWeight:700,
-                                  border:"1.5px solid #EF4444", borderRadius:7,
-                                  background:"none", color:"#EF4444", cursor:"pointer" }}>🗑 Eliminar</button>
-                              </div>
+                                    {/* MÉTRICAS */}
+                                    <div>
+                                      <div style={tit}>Métricas</div>
+                                      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"5px" }}>
+                                        {[
+                                          {label:"Impresiones", value:a.impresiones||0},
+                                          {label:"Clicks",      value:a.clicks||0},
+                                          {label:"CTR",         value:(a.impresiones?(((a.clicks||0)/a.impresiones)*100).toFixed(1):0)+"%"},
+                                          {label:"Ranking",     value:a.ranking_score?Number(a.ranking_score).toFixed(3):"—"},
+                                          {label:"Rating",      value:a.rating_promedio?Number(a.rating_promedio).toFixed(1)+" ★":"—"},
+                                          {label:"Reseñas",     value:a.rating_count||0},
+                                        ].map(m=>(
+                                          <div key={m.label} style={{background:"#fff",borderRadius:7,
+                                            padding:"0.4rem 0.5rem",border:"1px solid #E5E7EB"}}>
+                                            <div style={{fontSize:"9px",color:"#9CA3AF",textTransform:"uppercase"}}>{m.label}</div>
+                                            <div style={{fontWeight:700,color:"#374151",fontSize:"0.85rem"}}>{m.value}</div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </div>
 
-                              {/* Sync fila 1: ML, Meta, WA, Custom */}
-                              <div style={{ fontSize:"9px", color:"#9CA3AF", textTransform:"uppercase",
-                                margin:"8px 0 4px", letterSpacing:".05em" }}>Publicar en</div>
-                              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr 1fr", gap:"4px", marginBottom:"4px" }}>
-                                {[
-                                  { icon:"🟡", label:"ML",     c:"#FFE600", tc:"#333" },
-                                  { icon:"🔵", label:"Meta",   c:"#1877F2", tc:"#fff" },
-                                  { icon:"🟢", label:"WA",     c:"#25D366", tc:"#fff" },
-                                  { icon:"⚙",  label:"Custom", c:"#6B7280", tc:"#fff" },
-                                ].map(s => (
-                                  <button key={s.label} style={{
-                                    padding:"0.35rem 0.1rem", fontSize:"10px", fontWeight:700,
-                                    border:`1.5px solid ${s.c}`, borderRadius:6,
-                                    background:s.c, color:s.tc, cursor:"pointer" }}>
-                                    {s.icon} {s.label}
-                                  </button>
-                                ))}
-                              </div>
-
-                              {/* Sync fila 2: Ver en canales */}
-                              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr 1fr", gap:"4px" }}>
-                                {[
-                                  { icon:"🟡", label:"Ver ML"  },
-                                  { icon:"🔵", label:"Ver Meta"},
-                                  { icon:"🟢", label:"Ver WA"  },
-                                  { icon:"🌐", label:"Mi web"  },
-                                ].map(s => (
-                                  <button key={s.label} style={{
-                                    padding:"0.35rem 0.1rem", fontSize:"10px", fontWeight:600,
-                                    border:"1.5px solid #E5E7EB", borderRadius:6,
-                                    background:"#fff", color:"#6B7280", cursor:"pointer" }}>
-                                    {s.icon} {s.label}
-                                  </button>
-                                ))}
-                              </div>
+                                    {/* DIVIDER + GUARDAR/CANCELAR */}
+                                    {isEd && (
+                                      <>
+                                        <hr style={{border:"none",borderTop:"1px solid #E5E7EB",margin:"0"}}/>
+                                        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px"}}>
+                                          <button onClick={()=>setEditing(null)} style={{
+                                            padding:"0.55rem",fontSize:"0.82rem",fontWeight:700,
+                                            border:"1.5px solid #E5E7EB",borderRadius:8,
+                                            background:"#fff",color:"#6B7280",cursor:"pointer"}}>
+                                            Cancelar
+                                          </button>
+                                          <button onClick={()=>saveEdit(a.id)} style={{
+                                            padding:"0.55rem",fontSize:"0.82rem",fontWeight:700,
+                                            border:"none",borderRadius:8,
+                                            background:color,color:"#fff",cursor:"pointer"}}>
+                                            Guardar
+                                          </button>
+                                        </div>
+                                      </>
+                                    )}
+                                  </>
+                                );
+                              })()}
                             </div>
                           </div>
                         </td>
