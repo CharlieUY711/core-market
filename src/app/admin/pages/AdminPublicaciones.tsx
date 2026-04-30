@@ -267,22 +267,29 @@ export default function AdminPublicaciones() {
           </p>
         </div>
         <div style={{ display:"flex", gap:"0.75rem", alignItems:"center" }}>
-          {/* Toggle MKT/SH */}
-          <button
-            onMouseDown={() => setIsSH(true)}
-            onMouseUp={() => setIsSH(false)}
-            onMouseLeave={() => setIsSH(false)}
-            onTouchStart={() => setIsSH(true)}
-            onTouchEnd={() => setIsSH(false)}
-            style={{
-              padding:"0.6rem 1.25rem", border:"none", borderRadius:10,
-              fontWeight:700, fontSize:"0.875rem", cursor:"pointer",
+          {/* Toggle MKT/SH — botón físico */}
+          <div style={{ display:"flex", borderRadius:12, overflow:"hidden",
+            boxShadow:"0 4px 10px rgba(0,0,0,.15), inset 0 1px 0 rgba(255,255,255,.2)",
+            border:"1px solid rgba(0,0,0,.08)", flexShrink:0, width:260 }}>
+            <button onClick={() => setIsSH(false)} style={{
+              flex:1, padding:"0.65rem 0", border:"none", cursor:"pointer",
+              fontWeight:800, fontSize:"0.875rem", letterSpacing:".01em",
+              background: !isSH ? ACCENT : "#F3F4F6",
+              color: !isSH ? "#fff" : "#9CA3AF",
+              boxShadow: !isSH ? "inset 0 2px 4px rgba(0,0,0,.2)" : "none",
+              transform: !isSH ? "translateY(1px)" : "translateY(0)",
+              transition:"all .12s",
+            }}>Market</button>
+            <button onClick={() => setIsSH(true)} style={{
+              flex:1, padding:"0.65rem 0", border:"none", cursor:"pointer",
+              fontWeight:800, fontSize:"0.875rem", letterSpacing:".01em",
               background: isSH ? GREEN : "#F3F4F6",
-              color: isSH ? "#fff" : "#6B7280",
-              transition:"all .15s",
-            }}>
-            {isSH ? "♻️ Second Hand" : "🛍 Market"}
-          </button>
+              color: isSH ? "#fff" : "#9CA3AF",
+              boxShadow: isSH ? "inset 0 2px 4px rgba(0,0,0,.2)" : "none",
+              transform: isSH ? "translateY(1px)" : "translateY(0)",
+              transition:"all .12s",
+            }}>Second Hand</button>
+          </div>
           {/* Nuevo artículo */}
           <button onClick={() => navigate("/admin/catalog/articulos")} style={{
             padding:"0.6rem 1.25rem", background:color, color:"#fff",
@@ -572,21 +579,21 @@ export default function AdminPublicaciones() {
                                       <div style={tit}>Acciones</div>
                                       <div style={{ ...grid3, marginBottom:"5px" }}>
                                         <button onClick={()=>navigate("/admin/catalog/articulos")}
-                                          style={btn(color,"#fff",color)}>＋ Nuevo</button>
+                                          style={btn(color,"#fff",color)}>Nuevo</button>
                                         <button onClick={()=>clonar(a)}
-                                          style={btn("none",BLUE,BLUE)}>⎘ Clonar</button>
+                                          style={btn("#fff",color,color)}>Clonar</button>
                                         <button onClick={()=>isEd?setEditing(null):startEdit(a)}
-                                          style={btn(isEd?BLUE:"none",isEd?"#fff":BLUE,BLUE)}>✏ Editar</button>
+                                          style={btn(isEd?color:"#fff",isEd?"#fff":color,color)}>Editar</button>
                                       </div>
                                       <div style={grid3}>
                                         <button onClick={()=>cambiarStatus(a.id,a.status==="active"?"paused":"active")}
-                                          style={btn("none","#854d0e","#F59E0B")}>
-                                          {a.status==="active"?"⏸ Pausar":"▶ Activar"}
+                                          style={btn("#fff",color,color)}>
+                                          {a.status==="active"?"Pausar":"Activar"}
                                         </button>
                                         <button onClick={()=>archivar(a.id)}
-                                          style={btn("none","#6B7280","#6B7280")}>📦 Archivar</button>
+                                          style={btn("#fff",color,color)}>Archivar</button>
                                         <button onClick={()=>eliminar(a.id)}
-                                          style={btn("none","#EF4444","#EF4444")}>🗑 Eliminar</button>
+                                          style={btn("#fff","#EF4444","#EF4444")}>Eliminar</button>
                                       </div>
                                     </div>
 
@@ -595,33 +602,41 @@ export default function AdminPublicaciones() {
                                       <div style={tit}>Publicar en</div>
                                       <div style={{ ...grid4, marginBottom:"4px" }}>
                                         {[
-                                          {icon:"🟡",label:"ML",    c:"#FFE600",tc:"#333"},
-                                          {icon:"🔵",label:"Meta",  c:"#1877F2",tc:"#fff"},
-                                          {icon:"🟢",label:"WA",    c:"#25D366",tc:"#fff"},
-                                          {icon:"⚙", label:"Custom",c:"#6B7280",tc:"#fff"},
-                                        ].map(s=>(
-                                          <button key={s.label} style={{
-                                            padding:"0.4rem 0.1rem",fontSize:"10px",fontWeight:700,
-                                            border:`1.5px solid ${s.c}`,borderRadius:6,
-                                            background:s.c,color:s.tc,cursor:"pointer"}}>
-                                            {s.icon} {s.label}
-                                          </button>
-                                        ))}
+                                          {label:"ML",    c:"#FFE600",tc:"#333", syncKey:"sync_ml"},
+                                          {label:"Meta",  c:"#1877F2",tc:"#fff", syncKey:"sync_meta"},
+                                          {label:"WA",    c:"#25D366",tc:"#fff", syncKey:"sync_wa"},
+                                          {label:"Custom",c:"#6B7280",tc:"#fff", syncKey:""},
+                                        ].map(s=>{
+                                          const synced = s.syncKey ? !!(a as any)[s.syncKey] : false;
+                                          return (
+                                            <button key={s.label} style={{
+                                              padding:"0.4rem 0.1rem",fontSize:"10px",fontWeight:700,
+                                              border:`1.5px solid ${s.c}`,borderRadius:6,cursor:"pointer",
+                                              background: synced ? s.c : "rgba(255,255,255,0.5)",
+                                              color: synced ? s.tc : s.c,
+                                              opacity: synced ? 1 : 0.5,
+                                              transition:"all .2s",
+                                            }}>{s.label}</button>
+                                          );
+                                        })}
                                       </div>
                                       <div style={grid4}>
                                         {[
-                                          {icon:"🟡",label:"Ver ML"},
-                                          {icon:"🔵",label:"Ver Meta"},
-                                          {icon:"🟢",label:"Ver WA"},
-                                          {icon:"🌐",label:"Mi web"},
-                                        ].map(s=>(
-                                          <button key={s.label} style={{
-                                            padding:"0.4rem 0.1rem",fontSize:"10px",fontWeight:600,
-                                            border:"1.5px solid #E5E7EB",borderRadius:6,
-                                            background:"#fff",color:"#6B7280",cursor:"pointer"}}>
-                                            {s.icon} {s.label}
-                                          </button>
-                                        ))}
+                                          {label:"Ver ML",  syncKey:"sync_ml"},
+                                          {label:"Ver Meta",syncKey:"sync_meta"},
+                                          {label:"Ver WA",  syncKey:"sync_wa"},
+                                          {label:"Mi web",  syncKey:""},
+                                        ].map(s=>{
+                                          const synced = s.syncKey ? !!(a as any)[s.syncKey] : true;
+                                          return (
+                                            <button key={s.label} style={{
+                                              padding:"0.4rem 0.1rem",fontSize:"10px",fontWeight:600,
+                                              border:"1.5px solid #E5E7EB",borderRadius:6,
+                                              background:"#fff",color:"#6B7280",cursor:"pointer",
+                                              opacity: synced ? 1 : 0.4,
+                                            }}>{s.label}</button>
+                                          );
+                                        })}
                                       </div>
                                     </div>
 
