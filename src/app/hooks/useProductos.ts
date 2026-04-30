@@ -154,7 +154,7 @@ export function useProductos() {
             n: a.nombre,
             p: precio,
             o: precioOrig,
-            b: desc ? -\% : null,
+            b: desc ? ("-" + desc + "%") : null,
             bt: '',
             desc: a.descripcion || '',
             r: a.rating_promedio || 0,
