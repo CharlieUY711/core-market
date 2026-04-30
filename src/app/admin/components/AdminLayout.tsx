@@ -219,7 +219,7 @@ export default function AdminLayout() {
   fontSize:"0.875rem",
   background: active ? "rgba(255,122,0,0.15)" : "transparent",
   color: active ? ACCENT : "rgba(255,255,255,0.62)",
-  borderLeft: active ? `3px solid ${ACCENT}` : "3px solid transparent",
+  borderLeft: active ? "3px solid " + ACCENT : "3px solid transparent",
   fontWeight: active ? 600 : 400,
   transition:"all 0.12s",
               }}>{item.label}</Link>
@@ -249,7 +249,7 @@ export default function AdminLayout() {
   fontSize:"0.875rem",
   background: active ? `rgba(255,122,0,0.15)` : "transparent",
   color: active ? ACCENT : "rgba(255,255,255,0.62)",
-  borderLeft: active ? `3px solid ${ACCENT}` : "3px solid transparent",
+  borderLeft: active ? "3px solid " + ACCENT : "3px solid transparent",
   fontWeight: active ? 600 : 400,
   transition:"all 0.12s",
                     }}>{item.label}</Link>
@@ -400,4 +400,5 @@ export default function AdminLayout() {
     </div>
   );
 }
+
 
