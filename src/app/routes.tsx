@@ -1,4 +1,4 @@
-import { createBrowserRouter, type RouteObject } from "react-router-dom";
+﻿import { createBrowserRouter, type RouteObject } from "react-router-dom";
 import OddyStorefront          from "./public/OddyStorefront";
 import CarritoPage             from "./public/CarritoPage";
 import CheckoutPage            from "./public/CheckoutPage";
@@ -15,8 +15,8 @@ import AdminAnalytics          from "./admin/pages/AdminAnalytics";
 import AdminML                 from "./admin/pages/AdminML";
 import AdminCatalog            from "./admin/pages/AdminCatalog";
 import AdminExport from "./admin/pages/AdminExport";
-import AdminExport from "./admin/pages/AdminExport";`nimport AdminProfile            from "./admin/pages/AdminProfile";
-import AdminPublicaciones      from "./admin/pages/AdminPublicaciones";
+import AdminExport from "./admin/pages/AdminExport";
+import AdminProfile            from "./admin/pages/AdminProfile";
 import AdminArticulos          from "./admin/pages/AdminArticulos";
 import AdminBiblioteca         from "./admin/pages/AdminBiblioteca";
 import AdminEditor             from "./admin/editor/EditorPage";
@@ -41,7 +41,8 @@ export const TODAS_LAS_RUTAS: (RouteObject & { id: string })[] = [
       { id: "admin-orders",         path: "orders",        Component: AdminOrders },
       { id: "admin-publicaciones",  path: "publicaciones", Component: AdminPublicaciones },
       { id: "admin-export", path: "export", Component: AdminExport },
-      { id: "admin-export", path: "export", Component: AdminExport },`n      { id: "admin-profile",        path: "profile",       Component: AdminProfile },
+      { id: "admin-export", path: "export", Component: AdminExport },
+      { id: "admin-profile",        path: "profile",       Component: AdminProfile },
       { id: "admin-catalog-articulos", path: "catalog/articulos", Component: AdminArticulos },
       { id: "admin-biblioteca", path: "biblioteca", Component: AdminBiblioteca },
       { id: "admin-editor", path: "editor", Component: AdminEditor },
