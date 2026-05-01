@@ -15,7 +15,7 @@ import AdminAnalytics          from "./admin/pages/AdminAnalytics";
 import AdminML                 from "./admin/pages/AdminML";
 import AdminCatalog            from "./admin/pages/AdminCatalog";
 import AdminExport from "./admin/pages/AdminExport";
-import AdminExport from "./admin/pages/AdminExport";
+import AdminPublicaciones      from "./admin/pages/AdminPublicaciones";
 import AdminProfile            from "./admin/pages/AdminProfile";
 import AdminArticulos          from "./admin/pages/AdminArticulos";
 import AdminBiblioteca         from "./admin/pages/AdminBiblioteca";
