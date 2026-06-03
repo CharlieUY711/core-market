@@ -373,3 +373,9 @@ body {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
+
+/* Barra de categorías — mismo color que topbar */
+.core-categories-menu {
+  background: transparent !important;
+  border-top: 1px solid rgba(255,255,255,.1) !important;
+}
