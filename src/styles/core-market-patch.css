@@ -303,3 +303,39 @@ body { font-family: var(--font-base) !important; }
 .core-header-right {
   padding-right: 32px !important;
 }
+
+/* Botón ingreso/registro mismo color que usuario */
+[data-sh="false"] .core-login-btn {
+  background: #1A4F9C !important;
+  border: none !important;
+}
+[data-sh="true"] .core-login-btn {
+  background: #4ECBA0 !important;
+  border: none !important;
+}
+
+/* Botón second mismo alto que usuario */
+.core-mode-btn {
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+}
+
+/* Menú centrado */
+.core-categories-menu {
+  justify-content: center !important;
+}
+
+/* Buscador centrado — flex con margen automático */
+.core-header-left {
+  margin-right: auto !important;
+}
+.core-header-right {
+  margin-left: auto !important;
+}
+.core-search {
+  flex: none !important;
+  width: 40% !important;
+  min-width: 300px !important;
+  max-width: 600px !important;
+}
