@@ -1,233 +1,213 @@
 /* ═══════════════════════════════════════════════
-   CORE Market — Storefront Tokens Override v2.0
-   Reemplaza tokens del core-storefront.css base
-   Aplica Navy para Market, Green CORE para Second Hand
+   CORE Market — Patch v3.0 (limpio)
    ═══════════════════════════════════════════════ */
 
-/* ── Tokens base Market ───────────────────────── */
+/* ── Tokens base ──────────────────────────────── */
 :root {
-  --bg:      #F2F5FA;
-  --surface: #FFFFFF;
-  --white:   #FFFFFF;
-  --line:    #C8D5E8;
-  --linew:   rgba(255,255,255,.85);
-  --text:    #0D2B55;
-  --muted:   #7A7A7A;
-  --cyan:    #2E6FC4;
-  --accent:  #C9A84C;
-  --accent2: #1A4F9C;
-  --nav-bg:  #0D2B55;
-  --r:       8px;
-  --gap:     8px;
-  --sh:      0 2px 8px rgba(13,43,85,.08), 0 1px 3px rgba(13,43,85,.04);
-  --shlg:    0 8px 24px rgba(13,43,85,.14), 0 2px 8px rgba(13,43,85,.08);
+  --bg:       #F2F5FA;
+  --surface:  #FFFFFF;
+  --white:    #FFFFFF;
+  --line:     #C8D5E8;
+  --text:     #0D2B55;
+  --muted:    #7A7A7A;
+  --cyan:     #2E6FC4;
+  --accent:   #C9A84C;
+  --accent2:  #1A4F9C;
+  --nav-bg:   #0D2B55;
+  --r:        8px;
+  --gap:      8px;
+  --sh:       0 2px 8px rgba(13,43,85,.08);
+  --shlg:     0 8px 24px rgba(13,43,85,.14);
   --font-base: Calibri, 'Segoe UI', system-ui, sans-serif;
 }
 
-/* ── ⚠️ SECOND HAND — Green CORE ──────────────────
-   Fondo claro igual que Market.
-   Solo cambian accent y nav-bg.
-   ─────────────────────────────────────────────── */
 [data-sh="true"] {
-  --bg:      #F2F5FA;
-  --surface: #FFFFFF;
-  --line:    #C8D5E8;
-  --text:    #0D2B55;
-  --muted:   #7A7A7A;
   --accent:  #1D9E75;
   --accent2: #16845F;
   --nav-bg:  #1D9E75;
 }
-/* ── FIN SECOND HAND ──────────────────────────── */
 
 /* ── Body ─────────────────────────────────────── */
-body {
-  font-family: var(--font-base) !important;
-  background: var(--bg);
-  color: var(--text);
-}
+body { font-family: var(--font-base) !important; }
 
-/* ── Topbar / Navbar ──────────────────────────── */
+/* ── Topbar ───────────────────────────────────── */
 .core-tb {
   background: var(--nav-bg) !important;
-  border-bottom: 1px solid rgba(201,168,76,.2) !important;
-  transition: background 0.4s ease, border-color 0.4s ease !important;
+  border-bottom: none !important;
+  transition: background 0.4s ease !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+[data-sh="true"]  .core-tb { background: #1D9E75 !important; }
+[data-sh="false"] .core-tb { background: #0D2B55 !important; }
+
+/* ── Todo el texto del navbar blanco ──────────── */
+.core-tb *, .core-header *, .core-categories-menu * {
+  color: #ffffff !important;
 }
 
-[data-sh="true"] .core-tb {
-  background: #1D9E75 !important;
-  border-bottom-color: rgba(255,255,255,.15) !important;
+/* ── Header — layout ──────────────────────────── */
+.core-header {
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding: 8px 32px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  width: 100% !important;
+}
+.core-header-left {
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+.core-header-right {
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
 }
 
-[data-sh="false"] .core-tb {
-  background: #0D2B55 !important;
-  border-bottom-color: rgba(201,168,76,.2) !important;
-}
-
-/* ── Navbar text y links ──────────────────────── */
-.core-tb *,
-.core-header *,
-.core-logo,
-.core-login-btn,
-.core-market-btn {
-  color: rgba(232,237,245,.9) !important;
-}
-
-.core-login-btn,
-.core-market-btn,
-.core-auth-btn {
-  background: rgba(255,255,255,.12) !important;
-  border: 1px solid rgba(255,255,255,.25) !important;
-  color: white !important;
-  border-radius: 4px !important;
-  transition: all 200ms ease !important;
-}
-
-.core-login-btn:hover,
-.core-market-btn:hover,
-.core-auth-btn:hover {
-  background: rgba(255,255,255,.2) !important;
-  border-color: rgba(255,255,255,.4) !important;
-}
-
-/* ── Search bar ───────────────────────────────── */
+/* ── Buscador ─────────────────────────────────── */
 .core-search {
+  flex: 1 !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 32px !important;
   background: rgba(255,255,255,.15) !important;
-  border: 1px solid rgba(255,255,255,.2) !important;
+  border: none !important;
   border-radius: 4px !important;
-  transition: all 200ms ease !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
 }
-
 .core-search input {
+  border: none !important;
   background: transparent !important;
-  color: white !important;
+  outline: none !important;
+  box-shadow: none !important;
+  color: #fff !important;
+  width: 100% !important;
 }
+.core-search input::placeholder { color: rgba(255,255,255,.5) !important; }
+.core-search:focus-within { background: rgba(255,255,255,.22) !important; }
 
-.core-search input::placeholder {
-  color: rgba(255,255,255,.5) !important;
-}
-
-.core-search:focus-within {
-  background: rgba(255,255,255,.22) !important;
-  border-color: rgba(255,255,255,.4) !important;
-}
-
-/* ── Categories menu bar ──────────────────────── */
-.core-categories-menu {
-  background: rgba(0,0,0,.15) !important;
-  border-top: 1px solid rgba(255,255,255,.1) !important;
-}
-
-.core-categories-menu span,
-.core-menu-item span {
-  color: rgba(255,255,255,.8) !important;
-}
-
-.core-menu-item:hover span {
-  color: #C9A84C !important;
-}
-
-[data-sh="true"] .core-menu-item:hover span {
-  color: rgba(255,255,255,1) !important;
-}
-
-/* ── Dropdown ─────────────────────────────────── */
-.core-dropdown {
-  background: #0D2B55 !important;
-  border: 1px solid rgba(201,168,76,.2) !important;
-}
-
-[data-sh="true"] .core-dropdown {
-  background: #1D9E75 !important;
-  border-color: rgba(255,255,255,.2) !important;
-}
-
-.core-dropdown-item {
-  color: rgba(232,237,245,.8) !important;
-}
-
-.core-dropdown-item:hover {
-  background: rgba(255,255,255,.1) !important;
-  color: white !important;
-}
-
-/* ── Add to cart button Market ────────────────── */
-:not([data-sh="true"]) .core-add-btn {
-  background: #1A4F9C !important;
-  color: white !important;
+/* ── Botones header — tamaño uniforme ─────────── */
+.core-mode-btn,
+.core-login-btn,
+.core-header-right > a {
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   border-radius: 4px !important;
-  transition: background 200ms ease !important;
+  font-family: var(--font-base) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  border: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+  text-decoration: none !important;
 }
 
-:not([data-sh="true"]) .core-add-btn:hover {
-  background: #0D2B55 !important;
+/* ── Icono logout ─────────────────────────────── */
+.core-header-right > button:not(.core-login-btn) {
+  width: auto !important;
+  min-width: auto !important;
+  max-width: auto !important;
+  background: transparent !important;
+  border: none !important;
+  color: rgba(255,255,255,.6) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 4px !important;
 }
 
-/* ── Add to cart button Second Hand ──────────── */
-[data-sh="true"] .core-add-btn {
-  background: #1D9E75 !important;
-  color: white !important;
+/* ── Carrito ──────────────────────────────────── */
+.core-cart { display: flex !important; align-items: center !important; }
+
+/* ── Categories bar ───────────────────────────── */
+.core-categories-menu {
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding: 0 32px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  background: transparent !important;
+  border-top: none !important;
 }
+.core-categories-menu::before { display: none !important; }
 
-[data-sh="true"] .core-add-btn:hover {
-  background: #16845F !important;
+/* ── Main content ─────────────────────────────── */
+.core-main {
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  padding: 80px 32px 70px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
 }
+.core-shdr, .core-grid, .core-dstrip, .core-cs-sticky {
+  max-width: 1400px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+.core-shdr { padding: 18px 0 10px !important; }
+.core-grid { padding: 0 !important; }
 
-/* ── Mode toggle button ───────────────────────── */
-.core-mode-tab.to-sh  { background: #1D9E75 !important; }
-.core-mode-tab.to-mkt { background: #0D2B55 !important; }
+/* ── Ver más ──────────────────────────────────── */
+[data-sh="false"] .core-slink { color: #1A4F9C !important; }
+[data-sh="true"]  .core-slink { color: #1D9E75 !important; }
 
-/* ── Second Hand banner accent ────────────────── */
-.core-shtitle span      { color: #1D9E75 !important; }
-.core-shnv              { color: #1D9E75 !important; }
-.core-shstn             { color: #1D9E75 !important; }
-.core-shtxt             { color: #1D9E75 !important; }
-.core-secondhand-btn    { border-color: #1D9E75 !important; color: #1D9E75 !important; }
-.core-secondhand-btn:hover { background: #1D9E75 !important; color: white !important; }
+/* ── Flash de modo ────────────────────────────── */
+.core-flash { background: rgba(0,0,0,.7) !important; }
+[data-sh="false"] .core-fw { color: #1A4F9C !important; }
+[data-sh="true"]  .core-fw { color: #1D9E75 !important; }
 
-/* ── Cart tag colors ──────────────────────────── */
+/* ── Botones add to cart ──────────────────────── */
+:not([data-sh="true"]) .core-add-btn {
+  background: #1A4F9C !important; color: white !important; border-radius: 4px !important;
+}
+:not([data-sh="true"]) .core-add-btn:hover { background: #0D2B55 !important; }
+[data-sh="true"] .core-add-btn { background: #1D9E75 !important; color: white !important; }
+[data-sh="true"] .core-add-btn:hover { background: #16845F !important; }
+
+/* ── Cart tags ────────────────────────────────── */
 .core-cart-ptag.mkt { background: #1A4F9C !important; }
 .core-cart-ptag.sh  { background: #1D9E75 !important; }
 
-/* ── Mobile bottom bar ────────────────────────── */
-.core-mobile-bottom-bar {
-  background: var(--nav-bg) !important;
-  border-top: 1px solid rgba(255,255,255,.1) !important;
-}
+/* ── Second Hand accents ──────────────────────── */
+.core-shtitle span, .core-shnv, .core-shstn, .core-shtxt { color: #1D9E75 !important; }
+.core-secondhand-btn { border-color: #1D9E75 !important; color: #1D9E75 !important; }
+.core-secondhand-btn:hover { background: #1D9E75 !important; color: white !important; }
 
-[data-sh="true"] .core-mobile-bottom-bar {
-  background: #1D9E75 !important;
-}
+/* ── Panel Second Hand ────────────────────────── */
+[data-sh="true"] .core-panel-inner { background: #EEF7F2 !important; }
+[data-sh="true"] .core-panel-add   { background: #1D9E75 !important; }
 
-[data-sh="false"] .core-mobile-bottom-bar {
-  background: #0D2B55 !important;
-}
-
-/* ── Mobile footer ────────────────────────────── */
-.core-mobile-footer {
-  background: var(--nav-bg) !important;
-}
-
-[data-sh="true"] .core-mobile-footer  { background: #1D9E75 !important; }
+/* ── Mobile ───────────────────────────────────── */
+[data-sh="true"]  .core-mobile-bottom-bar,
+[data-sh="true"]  .core-mobile-footer { background: #1D9E75 !important; }
+[data-sh="false"] .core-mobile-bottom-bar,
 [data-sh="false"] .core-mobile-footer { background: #0D2B55 !important; }
 
-/* ── Panel interior Second Hand ───────────────── */
-[data-sh="true"] .core-panel-inner {
-  background: #EEF7F2 !important;
-}
-
-[data-sh="true"] .core-panel-add {
-  background: #1D9E75 !important;
-}
-
-/* ── Nav icons active state ───────────────────── */
-.core-ni.on .core-icon  { stroke: #C9A84C; }
-.core-ni.on .core-nlbl  { color: #C9A84C; }
-.core-ni-sh .core-icon  { stroke: #1D9E75; }
-.core-ni-sh .core-nlbl  { color: #1D9E75; }
-
-/* ── Scrollbar CORE ───────────────────────────── */
-::-webkit-scrollbar       { width: 4px; height: 4px; }
+/* ── Scrollbar ────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(13,43,85,.2); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(13,43,85,.4); }
@@ -235,261 +215,47 @@ body {
 /* ── Selection ────────────────────────────────── */
 ::selection { background: rgba(26,79,156,.2); color: #0D2B55; }
 
-/* Fix doble borde buscador */
-.core-search {
-  border: none !important;
-  border-radius: 4px !important;
-  background: rgba(255,255,255,.15) !important;
-  box-shadow: none !important;
-}
-.core-search input {
-  border: none !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  outline: none !important;
-  box-shadow: none !important;
-  color: #fff !important;
-}
-.core-search input::placeholder {
-  color: rgba(255,255,255,.5) !important;
-}
-.core-search:focus-within {
-  background: rgba(255,255,255,.22) !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* Flash de modo */
-.core-flash { background: rgba(0,0,0,.7) !important; }
-[data-sh="false"] .core-fw { color: #1A4F9C !important; }
-[data-sh="true"]  .core-fw { color: #1D9E75 !important; }
-
-/* Reducir espacio entre navbar y contenido */
-.core-main { padding-top: 80px !important; }
-
-/* Ver más — azul en Market, verde en Second Hand */
-[data-sh="false"] .core-slink { color: #1A4F9C !important; }
-[data-sh="true"]  .core-slink { color: #1D9E75 !important; }
-
-/* Texto navbar 100% blanco */
-.core-tb, .core-tb *, .core-header, .core-header *,
-.core-categories-menu, .core-categories-menu *,
-.core-menu-item, .core-menu-item * {
-  color: #ffffff !important;
-}
-
-/* Todo el navbar blanco excepto buscador */
-.core-tb *:not(.core-search):not(.core-search *) {
-  color: #ffffff !important;
-}
-
-/* Header centrado con buscador acotado */
+/* Fix justify-content para que flex:1 funcione */
 .core-header {
-  max-width: 1280px !important;
-  margin: 0 auto !important;
-  padding: 6px 24px !important;
-}
-.core-search {
-  max-width: 480px !important;
-  width: 100% !important;
-}
-.core-categories-menu {
-  max-width: 1280px !important;
-  margin: 0 auto !important;
-  padding: 0 24px !important;
+  justify-content: flex-start !important;
 }
 
-/* Header centrado con buscador acotado */
-.core-header {
-  max-width: 1280px !important;
-  margin: 0 auto !important;
-  padding: 6px 24px !important;
-}
-.core-search {
-  max-width: 480px !important;
-  width: 100% !important;
-}
-.core-categories-menu {
-  max-width: 1280px !important;
-  margin: 0 auto !important;
-  padding: 0 24px !important;
-}
-
-/* Barra de categorías — doble alto y alineada */
-.core-categories-menu {
-  height: 48px !important;
-  display: flex !important;
-  align-items: center !important;
-  padding: 0 24px !important;
-  max-width: 100% !important;
-}
-
-/* Buscador — ocupa todo el espacio libre */
-.core-header {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-}
-.core-search {
-  flex: 1 !important;
-  max-width: none !important;
-  min-width: 0 !important;
-}
+/* Fix width core-header-left */
 .core-header-left {
-  flex-shrink: 0 !important;
-}
-.core-header-right {
-  flex-shrink: 0 !important;
+  width: auto !important;
 }
 
-/* Container global — nada sale fuera del ancho del header */
-.core-tb {
-  width: 100% !important;
-}
-.core-header {
+/* Línea separadora entre header y menú */
+.core-tb::after {
+  content: '' !important;
+  display: block !important;
+  height: 2px !important;
   max-width: 1400px !important;
   margin: 0 auto !important;
-  width: 100% !important;
-  padding: 6px 32px !important;
-  box-sizing: border-box !important;
-}
-.core-categories-menu {
-  max-width: 1400px !important;
-  margin: 0 auto !important;
-  width: 100% !important;
   padding: 0 32px !important;
   box-sizing: border-box !important;
-  height: 36px !important;
+  background: #C9A84C !important;
 }
-.core-main {
-  max-width: 1400px !important;
-  margin: 0 auto !important;
-  width: 100% !important;
-  padding-left: 32px !important;
-  padding-right: 32px !important;
-  box-sizing: border-box !important;
-}
-.core-shdr {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
+[data-sh="false"] .core-tb::after { background: #C9A84C !important; }
+[data-sh="true"]  .core-tb::after { background: #1D9E75 !important; }
 
-/* Barra de categorías — mismo color que topbar */
+/* Menú carrusel alineado con buscador */
 .core-categories-menu {
-  background: transparent !important;
-  border-top: 1px solid rgba(255,255,255,.1) !important;
-}
-
-/* Separador alineado con contenido — no full width */
-.core-tb {
-  padding: 0 !important;
-}
-.core-categories-menu {
-  border-top: none !important;
+  overflow: hidden !important;
   position: relative !important;
 }
-.core-categories-menu::before {
-  content: '' !important;
-  position: absolute !important;
-  top: 0 !important;
-  left: 32px !important;
-  right: 32px !important;
-  height: 1px !important;
-  background: rgba(255,255,255,.15) !important;
+
+/* Fuente DESTACADOS */
+.core-stitle {
+  font-family: var(--font-base) !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.15em !important;
+  color: var(--text) !important;
 }
 
-/* Todo el contenido dentro del mismo ancho que el header */
-.core-main,
-.core-shdr,
-.core-grid,
-.core-categories-menu,
-.core-dstrip,
-.core-cs-sticky {
-  max-width: 1400px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding-left: 32px !important;
-  padding-right: 32px !important;
-  box-sizing: border-box !important;
-  width: 100% !important;
-}
-
-.core-main {
-  padding-top: 80px !important;
-  padding-bottom: 70px !important;
-}
-
-.core-shdr {
-  padding-top: 18px !important;
-  padding-bottom: 10px !important;
-}
-
-.core-grid {
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-/* Separador exactamente alineado con el contenedor */
-.core-categories-menu::before {
-  left: 50% !important;
-  right: auto !important;
-  width: min(1400px, 100%) !important;
-  transform: translateX(-50%) !important;
-  padding: 0 32px !important;
-  box-sizing: border-box !important;
-}
-
-/* Separador alineado exactamente con el contenido */
-.core-categories-menu::before {
-  left: 32px !important;
-  right: 32px !important;
-  width: auto !important;
-  transform: none !important;
-  padding: 0 !important;
-}
-
-/* Wrapper global */
-.core-tb > *,
-.core-header,
-.core-categories-menu,
-.core-main {
-  max-width: 1400px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding-left: 32px !important;
-  padding-right: 32px !important;
-  box-sizing: border-box !important;
-}
-
-/* Separador entre las dos barras */
+/* +5px altura barra menú sin mover texto */
 .core-categories-menu {
-  border-top: 1px solid rgba(255,255,255,.15) !important;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-}
-
-/* Quitar el pseudo-elemento que causa problemas */
-.core-categories-menu::before {
-  display: none !important;
-}
-
-/* Altura uniforme y espaciado igual entre elementos del header */
-.core-header {
-  gap: 12px !important;
-  align-items: center !important;
-}
-.core-search,
-.core-login-btn,
-.core-auth-btn,
-.core-header-right a,
-.core-header-right button {
-  height: 36px !important;
-  display: flex !important;
-  align-items: center !important;
-  box-sizing: border-box !important;
-}
-.core-header-right {
-  display: flex !important;
-  align-items: center !important;
-  gap: 12px !important;
+  height: 41px !important;
+  padding-bottom: 5px !important;
 }
