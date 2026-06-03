@@ -341,3 +341,35 @@ body {
 .core-header-right {
   flex-shrink: 0 !important;
 }
+
+/* Container global — nada sale fuera del ancho del header */
+.core-tb {
+  width: 100% !important;
+}
+.core-header {
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  padding: 6px 32px !important;
+  box-sizing: border-box !important;
+}
+.core-categories-menu {
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  padding: 0 32px !important;
+  box-sizing: border-box !important;
+  height: 36px !important;
+}
+.core-main {
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+  box-sizing: border-box !important;
+}
+.core-shdr {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
