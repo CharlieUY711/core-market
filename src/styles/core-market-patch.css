@@ -379,3 +379,21 @@ body {
   background: transparent !important;
   border-top: 1px solid rgba(255,255,255,.1) !important;
 }
+
+/* Separador alineado con contenido — no full width */
+.core-tb {
+  padding: 0 !important;
+}
+.core-categories-menu {
+  border-top: none !important;
+  position: relative !important;
+}
+.core-categories-menu::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 32px !important;
+  right: 32px !important;
+  height: 1px !important;
+  background: rgba(255,255,255,.15) !important;
+}
