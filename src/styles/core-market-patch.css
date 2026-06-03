@@ -397,3 +397,34 @@ body {
   height: 1px !important;
   background: rgba(255,255,255,.15) !important;
 }
+
+/* Todo el contenido dentro del mismo ancho que el header */
+.core-main,
+.core-shdr,
+.core-grid,
+.core-categories-menu,
+.core-dstrip,
+.core-cs-sticky {
+  max-width: 1400px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 32px !important;
+  padding-right: 32px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+}
+
+.core-main {
+  padding-top: 80px !important;
+  padding-bottom: 70px !important;
+}
+
+.core-shdr {
+  padding-top: 18px !important;
+  padding-bottom: 10px !important;
+}
+
+.core-grid {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
