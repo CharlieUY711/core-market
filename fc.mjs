@@ -1,1 +1,0 @@
-import{readFileSync,writeFileSync}from"fs";const files=["src/app/hooks/useProductos.ts","src/app/public/OddyStorefront.tsx"];for(const file of files){let c=readFileSync(file,"utf8");c=c.replace(/\[([a-zA-Z_$][\w$]*\.[\w$.]*)\]\(https?:\/\/[^)]*\)/g,"$1");writeFileSync(file,c,"utf8");const left=(c.match(/\[[\w.]+\]\(http/g)||[]).length;console.log(file,left,"left");}

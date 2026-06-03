@@ -25,7 +25,7 @@ export default function Sidebar() {
       height: "100vh",
       padding: 20
     }}>
-      <h2>ODDY</h2>
+      <h2>CORE</h2>
 
       {menu.map(item => (
         <div key={item.name} style={{ margin: "10px 0" }}>
@@ -37,4 +37,5 @@ export default function Sidebar() {
     </div>
   )
 }
+
 

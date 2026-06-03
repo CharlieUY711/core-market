@@ -1,9 +1,9 @@
-﻿import { DocumentoData, RenderContext, RenderOptions, EmpresaConfig } from "../types";
+import { DocumentoData, RenderContext, RenderOptions, EmpresaConfig } from "../types";
 
 export const DEFAULT_EMPRESA: EmpresaConfig = {
   nombre:       "Charlie Market",
   web:          "charliemarket.com.uy",
-  email:        "soporte@oddy.com.uy",
+  email:        "soporte@core.lat",
   colorPrimary: "#FF7A00",
 };
 

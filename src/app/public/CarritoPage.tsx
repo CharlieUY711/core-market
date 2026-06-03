@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { getCarrito, actualizarItemCarrito, eliminarItemCarrito, vaciarCarrito, type CarritoItem } from '../services/carritoApi';
 import { fetchProductoMarketById, fetchProductoSecondHandById, type ProductoMarket, type ProductoSecondHand } from '../services/productosApi';
-import '../../styles/oddy.css';
+import '../../styles/core-storefront.css';
 
 interface CarritoItemCompleto extends CarritoItem {
   producto?: ProductoMarket | ProductoSecondHand;

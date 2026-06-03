@@ -1,6 +1,6 @@
 /* =====================================================
-   ODDY Storefront — OddyStorefront.tsx
-   Charlie Marketplace Builder v1.5
+   CORE Storefront — CoreStorefront.tsx
+   CORE Marketplace Builder v1.5
    Frontstore principal: Market + Segunda Mano
    ===================================================== */
 import { useState, useCallback, useRef, useEffect, useLayoutEffect } from 'react';
@@ -8,7 +8,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from '../../utils/supabase/client';
 import { useProductos } from '../hooks/useProductos';
 import { agregarAlCarrito } from '../services/carritoApi';
-import '../../styles/oddy.css';
+import '../../styles/core-storefront.css';
 
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -75,11 +75,11 @@ const DEPTS = [
 ];
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
-const IconHome   = () => <svg className="oddy-nico" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>;
-const IconGrid   = () => <svg className="oddy-nico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>;
-const IconShield = () => <svg className="oddy-nico" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>;
-const IconSearch = () => <svg className="oddy-nico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>;
-const IconUser   = () => <svg className="oddy-nico" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
+const IconHome   = () => <svg className="core-nico" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>;
+const IconGrid   = () => <svg className="core-nico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>;
+const IconShield = () => <svg className="core-nico" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>;
+const IconSearch = () => <svg className="core-nico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>;
+const IconUser   = () => <svg className="core-nico" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
 const IconBag    = () => <svg viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>;
 const IconSrchSm = () => <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>;
 const IconCart   = ({ size = 11 }: { size?: number }) => <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>;
@@ -175,9 +175,9 @@ function Dots({ count }: { count: number }) {
   // Los puntos mantienen su color original (verde para Second Hand según CSS)
   // No cambian según la luminosidad del fondo
   return (
-    <div className="oddy-crow">
+    <div className="core-crow">
       {[1,2,3,4,5].map(i => (
-        <div key={i} className={`oddy-cd${i <= count ? ' on' : ''}`} />
+        <div key={i} className={`core-cd${i <= count ? ' on' : ''}`} />
       ))}
     </div>
   );
@@ -186,9 +186,9 @@ function Dots({ count }: { count: number }) {
 function Stars({ r, rv, label }: { r: number; rv: number; label: string }) {
   const filled = Math.round(r);
   return (
-    <div className="oddy-stars">
-      <span className="oddy-stars-ico">{'★'.repeat(filled)}{'☆'.repeat(5 - filled)}</span>
-      <span className="oddy-stars-txt">{r.toFixed(1)} · {rv} {label}</span>
+    <div className="core-stars">
+      <span className="core-stars-ico">{'★'.repeat(filled)}{'☆'.repeat(5 - filled)}</span>
+      <span className="core-stars-txt">{r.toFixed(1)} · {rv} {label}</span>
     </div>
   );
 }
@@ -536,18 +536,18 @@ function FlipCard({ p, onAdd, onFlipped, deptColors, cartItems, isInCart }: {
   }, [p.img]);
 
   return (
-    <div id={`fc${p.id}`} className={`oddy-fc${flipped ? ' flipped' : ''}`} onClick={(e) => handleFlip(e)}>
-      <div className="oddy-fi">
+    <div id={`fc${p.id}`} className={`core-fc${flipped ? ' flipped' : ''}`} onClick={(e) => handleFlip(e)}>
+      <div className="core-fi">
 
         {/* ── FRONT FACE ── */}
-        <div className="oddy-ff">
-          <div className="oddy-top">
-            <div className="oddy-cimg">
+        <div className="core-ff">
+          <div className="core-top">
+            <div className="core-cimg">
               {playing && playingVideoIndex !== null && videoArray[playingVideoIndex] ? (
                 <>
                 <video
                     ref={videoRef}
-                  className="oddy-vid-frame"
+                  className="core-vid-frame"
                     src={videoArray[playingVideoIndex] || ''}
                     autoPlay={!isPaused}
                     muted={isMuted}
@@ -717,33 +717,33 @@ function FlipCard({ p, onAdd, onFlipped, deptColors, cartItems, isInCart }: {
                   )}
                 </>
               )}
-              <div className="oddy-dept-label">{p.d}</div>
+              <div className="core-dept-label">{p.d}</div>
             </div>
           </div>
 
           <div
-            className="oddy-divider"
+            className="core-divider"
             style={{ backgroundColor: deptColors[p.d] }}
           />
 
-          <div className="oddy-middle">
-            <div className="oddy-title">{p.n}</div>
-            <div className="oddy-price">$ {p.p}</div>
+          <div className="core-middle">
+            <div className="core-title">{p.n}</div>
+            <div className="core-price">$ {p.p}</div>
           </div>
 
-          <div className="oddy-bottom">
-            <button className="oddy-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={p.stock === 0 ? { background: '#ccc', cursor: 'not-allowed', color: '#888' } : btnStyle}>
+          <div className="core-bottom">
+            <button className="core-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={p.stock === 0 ? { background: '#ccc', cursor: 'not-allowed', color: '#888' } : btnStyle}>
               {p.stock === 0 ? 'Sin stock' : label}
             </button>
           </div>
         </div>
 
         {/* ── BACK FACE ── */}
-        <div className="oddy-fb">
-          <img className="oddy-ghost-img" src={selectedImage} alt="" aria-hidden="true" />
-          <div className="oddy-fb-content">
+        <div className="core-fb">
+          <img className="core-ghost-img" src={selectedImage} alt="" aria-hidden="true" />
+          <div className="core-fb-content">
             {/* Miniaturas */}
-            <div className="oddy-panel-miniatures" style={{ 
+            <div className="core-panel-miniatures" style={{ 
               display: 'grid',
               gridTemplateColumns: 'repeat(5, 1fr)',
               gap: '8px',
@@ -830,11 +830,11 @@ function FlipCard({ p, onAdd, onFlipped, deptColors, cartItems, isInCart }: {
             {/* Información igual a la primera tarjeta */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', width: '100%', gap: '8px' }}>
-                <div className="oddy-cname" style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.n}</div>
-                <div className="oddy-cprice" style={{ flexShrink: 0, textAlign: 'right' }}>$ {separatePrice(p.p)}</div>
+                <div className="core-cname" style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.n}</div>
+                <div className="core-cprice" style={{ flexShrink: 0, textAlign: 'right' }}>$ {separatePrice(p.p)}</div>
               </div>
             </div>
-            <div className="oddy-panel-desc">{p.desc}</div>
+            <div className="core-panel-desc">{p.desc}</div>
           </div>
           {/* Barra de preguntas - posicionada a la altura del divider (25% desde abajo) */}
           {(() => {
@@ -941,8 +941,8 @@ function FlipCard({ p, onAdd, onFlipped, deptColors, cartItems, isInCart }: {
               <span style={{ fontSize: '10px', fontWeight: 700, color: '#000', marginLeft: '4px' }}>{p.r.toFixed(1)}</span>
             </div>
           </div>
-          <div className="oddy-bottom">
-            <button className="oddy-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={p.stock === 0 ? { background: '#ccc', cursor: 'not-allowed', color: '#888' } : btnStyle}>
+          <div className="core-bottom">
+            <button className="core-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={p.stock === 0 ? { background: '#ccc', cursor: 'not-allowed', color: '#888' } : btnStyle}>
               {p.stock === 0 ? 'Sin stock' : label}
             </button>
           </div>
@@ -1334,19 +1334,19 @@ function SlideCard({ p, isOpen, dir, onToggle, onAdd, deptColors, cartItems, isI
   // En mobile, usar flip; en desktop, usar slide
   if (isMobile) {
     return (
-      <div className="oddy-card-slot">
-        <div id={`fc${p.id}`} className={`oddy-fc${flipped ? ' flipped' : ''}`} onClick={handleToggle}>
-          <div className="oddy-fi">
+      <div className="core-card-slot">
+        <div id={`fc${p.id}`} className={`core-fc${flipped ? ' flipped' : ''}`} onClick={handleToggle}>
+          <div className="core-fi">
             {/* FRONT FACE - usar la misma estructura que FlipCard */}
-            <div className="oddy-ff">
+            <div className="core-ff">
               {/* Contenido del frente - copiar de FlipCard */}
-              <div className="oddy-top">
-                <div className="oddy-cimg">
+              <div className="core-top">
+                <div className="core-cimg">
                   {playing && playingVideoIndex !== null && videoArray[playingVideoIndex] ? (
                     <>
                       <video
                         ref={videoRef}
-                        className="oddy-vid-frame"
+                        className="core-vid-frame"
                         src={videoArray[playingVideoIndex] || ''}
                         autoPlay={!isPaused}
                         muted={isMuted}
@@ -1511,26 +1511,26 @@ function SlideCard({ p, isOpen, dir, onToggle, onAdd, deptColors, cartItems, isI
                       )}
                     </>
                   )}
-                  <div className="oddy-dept-label">{p.d}</div>
+                  <div className="core-dept-label">{p.d}</div>
                 </div>
               </div>
-              <div className="oddy-divider" style={{ backgroundColor: deptColors[p.d] }} />
-              <div className="oddy-middle">
-                <div className="oddy-title">{p.n}</div>
-                <div className="oddy-price">$ {p.p}</div>
+              <div className="core-divider" style={{ backgroundColor: deptColors[p.d] }} />
+              <div className="core-middle">
+                <div className="core-title">{p.n}</div>
+                <div className="core-price">$ {p.p}</div>
               </div>
-              <div className="oddy-bottom">
-                <button className="oddy-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={p.stock === 0 ? { background: '#ccc', cursor: 'not-allowed', color: '#888' } : style}>
+              <div className="core-bottom">
+                <button className="core-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={p.stock === 0 ? { background: '#ccc', cursor: 'not-allowed', color: '#888' } : style}>
               {p.stock === 0 ? 'Sin stock' : label}
             </button>
               </div>
             </div>
             {/* BACK FACE - usar la misma estructura que FlipCard */}
-            <div className="oddy-fb">
-              <img className="oddy-ghost-img" src={selectedImage} alt="" aria-hidden="true" />
-              <div className="oddy-fb-content">
+            <div className="core-fb">
+              <img className="core-ghost-img" src={selectedImage} alt="" aria-hidden="true" />
+              <div className="core-fb-content">
                 {/* Miniaturas */}
-                <div className="oddy-panel-miniatures" style={{ 
+                <div className="core-panel-miniatures" style={{ 
                   display: 'grid',
                   gridTemplateColumns: 'repeat(5, 1fr)',
                   gap: '8px',
@@ -1618,10 +1618,10 @@ function SlideCard({ p, isOpen, dir, onToggle, onAdd, deptColors, cartItems, isI
                 </div>
                 {/* Información */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px', gap: '8px' }}>
-                  <div className="oddy-cprice" style={{ flexShrink: 0, textAlign: 'right' }}>$ {separatePrice(p.p)}</div>
+                  <div className="core-cprice" style={{ flexShrink: 0, textAlign: 'right' }}>$ {separatePrice(p.p)}</div>
                 </div>
                 {/* Descripción */}
-                <div className="oddy-panel-desc">{p.desc}</div>
+                <div className="core-panel-desc">{p.desc}</div>
                 {/* Preguntas y respuestas */}
                 {(() => {
                   const questions = [
@@ -1671,8 +1671,8 @@ function SlideCard({ p, isOpen, dir, onToggle, onAdd, deptColors, cartItems, isI
                     <span style={{ fontSize: '10px', fontWeight: 700, color: '#000', marginLeft: '4px' }}>{p.r.toFixed(1)}</span>
                   </div>
                 </div>
-                <div className="oddy-bottom">
-                  <button className="oddy-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={p.stock === 0 ? { background: '#ccc', cursor: 'not-allowed', color: '#888' } : style}>
+                <div className="core-bottom">
+                  <button className="core-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={p.stock === 0 ? { background: '#ccc', cursor: 'not-allowed', color: '#888' } : style}>
               {p.stock === 0 ? 'Sin stock' : label}
             </button>
                 </div>
@@ -1686,21 +1686,21 @@ function SlideCard({ p, isOpen, dir, onToggle, onAdd, deptColors, cartItems, isI
 
   // Desktop: usar slide (comportamiento original)
   return (
-    <div className={`oddy-card-slot${isOpen ? ' panel-open' : ''}`}>
+    <div className={`core-card-slot${isOpen ? ' panel-open' : ''}`}>
       {/* Static card */}
       <div
         id={`ec${p.id}`}
-        className={`oddy-ec${isOpen ? ' sh-open' : ''}`}
+        className={`core-ec${isOpen ? ' sh-open' : ''}`}
         onClick={handleToggle}
       >
         {/* ── FRONT FACE (igual estructura que Market) ── */}
-        <div className="oddy-top">
-          <div className="oddy-cimg">
+        <div className="core-top">
+          <div className="core-cimg">
             {playing && playingVideoIndex !== null && videoArray[playingVideoIndex] ? (
               <>
               <video
                   ref={videoRef}
-                className="oddy-vid-frame"
+                className="core-vid-frame"
                   src={videoArray[playingVideoIndex] || ''}
                   autoPlay={!isPaused}
                   muted={isMuted}
@@ -1870,34 +1870,34 @@ function SlideCard({ p, isOpen, dir, onToggle, onAdd, deptColors, cartItems, isI
                 )}
               </>
             )}
-            <div className="oddy-dept-label">{p.d}</div>
+            <div className="core-dept-label">{p.d}</div>
           </div>
         </div>
 
         <div
-          className="oddy-divider"
+          className="core-divider"
           style={{ backgroundColor: deptColors[p.d] }}
         />
 
-        <div className="oddy-middle">
-          <div className="oddy-title">{p.n}</div>
-          <div className="oddy-price">$ {p.p}</div>
+        <div className="core-middle">
+          <div className="core-title">{p.n}</div>
+          <div className="core-price">$ {p.p}</div>
         </div>
 
-        <div className="oddy-bottom">
-          <button className="oddy-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={p.stock === 0 ? { background: '#ccc', cursor: 'not-allowed', color: '#888' } : style}>
+        <div className="core-bottom">
+          <button className="core-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={p.stock === 0 ? { background: '#ccc', cursor: 'not-allowed', color: '#888' } : style}>
               {p.stock === 0 ? 'Sin stock' : label}
             </button>
         </div>
       </div>
 
       {/* Sliding panel */}
-      <div className={`oddy-panel-wrap dir-${dir}${isOpen ? ' open' : ''}`}>
-        <div className="oddy-panel-inner">
-          <img className="oddy-ghost-img" src={selectedImage} alt="" aria-hidden="true" />
-          <div className="oddy-panel-body">
+      <div className={`core-panel-wrap dir-${dir}${isOpen ? ' open' : ''}`}>
+        <div className="core-panel-inner">
+          <img className="core-ghost-img" src={selectedImage} alt="" aria-hidden="true" />
+          <div className="core-panel-body">
             {/* Miniaturas */}
-            <div className="oddy-panel-miniatures" style={{ 
+            <div className="core-panel-miniatures" style={{ 
               display: 'grid',
               gridTemplateColumns: 'repeat(5, 1fr)',
               gap: '8px',
@@ -1984,11 +1984,11 @@ function SlideCard({ p, isOpen, dir, onToggle, onAdd, deptColors, cartItems, isI
             {/* Información igual a la primera tarjeta */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', width: '100%' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', width: '100%', gap: '8px' }}>
-                <div className="oddy-cname" style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.n}</div>
-                <div className="oddy-cprice" style={{ flexShrink: 0, textAlign: 'right' }}>$ {separatePrice(p.p)}</div>
+                <div className="core-cname" style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.n}</div>
+                <div className="core-cprice" style={{ flexShrink: 0, textAlign: 'right' }}>$ {separatePrice(p.p)}</div>
               </div>
             </div>
-            <div className="oddy-panel-desc">{p.desc}</div>
+            <div className="core-panel-desc">{p.desc}</div>
           </div>
           {/* Barra de preguntas - posicionada a la altura del divider (25% desde abajo) */}
           {(() => {
@@ -2095,8 +2095,8 @@ function SlideCard({ p, isOpen, dir, onToggle, onAdd, deptColors, cartItems, isI
                 <span style={{ fontSize: '10px', fontWeight: 700, color: '#000', marginLeft: '4px' }}>{p.r.toFixed(1)}</span>
             </div>
           </div>
-          <div className="oddy-bottom">
-            <button className="oddy-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={p.stock === 0 ? { background: '#ccc', cursor: 'not-allowed', color: '#888' } : style}>
+          <div className="core-bottom">
+            <button className="core-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={p.stock === 0 ? { background: '#ccc', cursor: 'not-allowed', color: '#888' } : style}>
               {p.stock === 0 ? 'Sin stock' : label}
             </button>
           </div>
@@ -2111,13 +2111,13 @@ function CrossSellBar({ isSH, mp, sh }: { isSH: boolean; mp: MktProduct[]; sh: S
   const items  = isSH ? mp : sh;
   const label  = isSH ? '♻️ También en 2da Mano' : '🛍️ También en Market';
   return (
-    <div className="oddy-cs-sticky">
-      <span className="oddy-cs-lbl">{label}</span>
-      <div className="oddy-cs-scroller">
+    <div className="core-cs-sticky">
+      <span className="core-cs-lbl">{label}</span>
+      <div className="core-cs-scroller">
         {items.map(p => (
-          <div key={p.id} className="oddy-cs-thumb">
+          <div key={p.id} className="core-cs-thumb">
             <img src={p.img} alt={p.n} />
-            <div className="oddy-cs-thumb-p">{p.p}</div>
+            <div className="core-cs-thumb-p">{p.p}</div>
           </div>
         ))}
       </div>
@@ -2246,7 +2246,7 @@ function LoginModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
     </div>
   );
 }
-export default function OddyStorefront() {
+export default function CoreStorefront() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   // Cargar productos desde la API
@@ -2300,7 +2300,7 @@ export default function OddyStorefront() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (!target.closest('.oddy-menu-item')) {
+      if (!target.closest('.core-menu-item')) {
         setOpenDropdown(null);
       }
     };
@@ -2313,12 +2313,12 @@ export default function OddyStorefront() {
     }
   }, [openDropdown]);
 
-  // Ajustar el tamaño de "Market" para que tenga el mismo ancho que "Charlie Market"
+  // Ajustar el tamaño de "Market" para que tenga el mismo ancho que "CORE Market"
   useEffect(() => {
-    const oddyEl = document.getElementById('oddy-text');
+    const coreEl = document.getElementById('core-text');
     const marketEl = document.getElementById('market-text');
-    if (oddyEl && marketEl) {
-      const oddyWidth = oddyEl.offsetWidth;
+    if (coreEl && marketEl) {
+      const oddyWidth = coreEl.offsetWidth;
       const currentMarketSize = parseFloat(window.getComputedStyle(marketEl).fontSize);
       const currentMarketWidth = marketEl.offsetWidth;
       if (currentMarketWidth > 0) {
@@ -2364,7 +2364,7 @@ export default function OddyStorefront() {
     setTimeout(() => {
       setMode(prev => {
         const next = prev === 'mkt' ? 'sh' : 'mkt';
-        setFlashText(next === 'sh' ? 'SEGUNDA MANO' : 'Charlie Market');
+        setFlashText(next === 'sh' ? 'SEGUNDA MANO' : 'CORE Market');
         return next;
       });
       if (!silent) setTimeout(() => setFlash(false), 500);
@@ -2468,7 +2468,7 @@ export default function OddyStorefront() {
   // Calcular altura de la barra superior dinámicamente
   useEffect(() => {
     const calculateHeaderHeight = () => {
-      const header = document.querySelector('.oddy-tb');
+      const header = document.querySelector('.core-tb');
       if (header) {
         const rect = header.getBoundingClientRect();
         setHeaderHeight(rect.height);
@@ -2484,69 +2484,61 @@ export default function OddyStorefront() {
   return (
     <div data-sh={isSH ? 'true' : 'false'}>
       {/* FLASH */}
-      <div className={`oddy-flash${flash ? ' show' : ''}`}>
-        <div key={flashKey} className="oddy-fw">{flashText}</div>
+      <div className={`core-flash${flash ? ' show' : ''}`}>
+        <div key={flashKey} className="core-fw">{flashText}</div>
       </div>
 
       {/* ── TOPBAR ── */}
-      <header className="oddy-tb">
+      <header className="core-tb">
         {/* ── HEADER MÓVIL: SOLO BUSCADOR ARRIBA ── */}
-        <div className="oddy-mobile-header-top" style={{ paddingTop: "10px" }}>
-          <div className="oddy-search oddy-mobile-search-only">
+        <div className="core-mobile-header-top" style={{ paddingTop: "10px" }}>
+          <div className="core-search core-mobile-search-only">
             <input type="text" placeholder="encontra lo que buscas" />
           </div>
         </div>
         
         {/* ── HEADER PRINCIPAL RESPONSIVE (DESKTOP) ── */}
-        <div className="oddy-header" style={{ paddingTop: "10px" }}>
-          <div className="oddy-header-left">
-            <div className="oddy-logo">
-              <svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid meet">
-                {/* Hexágonos interconectados - tres hexágonos: dos abajo, uno arriba centrado */}
-                <g fill="none" stroke="#ffffff" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" transform="translate(0, 5)">
-                  {/* Hexágono superior (centrado) */}
-                  <path d="M 100 10 L 130 25 L 130 55 L 100 70 L 70 55 L 70 25 Z" />
-                  {/* Hexágono inferior izquierdo */}
-                  <path d="M 70 55 L 100 70 L 100 100 L 70 115 L 40 100 L 40 70 Z" />
-                  {/* Hexágono inferior derecho */}
-                  <path d="M 130 55 L 160 70 L 160 100 L 130 115 L 100 100 L 100 70 Z" />
-                </g>
-              </svg>
+        <div className="core-header" style={{ paddingTop: "10px" }}>
+          <div className="core-header-left" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ width: '32px', height: '32px', background: 'rgba(255,255,255,.15)', border: '1.5px solid rgba(255,255,255,.3)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1rem', color: '#fff', fontFamily: "Calibri, 'Segoe UI', sans-serif", flexShrink: 0 }}>m</div>
+              <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+                <span style={{ color: '#fff', fontWeight: 800, fontSize: '0.95rem', letterSpacing: '0.08em', fontFamily: "Calibri, 'Segoe UI', sans-serif", textTransform: 'uppercase' }}>MARKET</span>
+                <span style={{ color: 'rgba(255,255,255,.5)', fontWeight: 400, fontSize: '0.6rem', letterSpacing: '0.12em', fontFamily: "Calibri, 'Segoe UI', sans-serif", textTransform: 'uppercase' }}>by CORE</span>
+              </div>
             </div>
-
-            <span style={{ color: '#fff', fontWeight: 800, fontSize: '1.05rem', minWidth: '140px', display: 'inline-block', textAlign: 'center' }}>
-              {isSH ? 'Second Hand' : 'Market'}
-            </span>
+            <button onClick={() => toggleMode()} style={{ padding: '5px 12px', borderRadius: '4px', border: 'none', cursor: 'pointer', fontFamily: "Calibri, 'Segoe UI', sans-serif", fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'all 200ms ease', background: isSH ? '#1A4F9C' : '#1D9E75', color: '#fff', flexShrink: 0, minWidth: '80px' }}>
+              {isSH ? 'MARKET' : 'SECOND'}
+            </button>
           </div>
-
-          <div className="oddy-search">
+          <div className="core-search">
             <input type="text" placeholder="encontra lo que buscas" />
           </div>
 
-          <div className="oddy-header-right">
+          <div className="core-header-right">
             {currentUser ? (
-              <Link to="/dashboard/ordenes" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', borderRadius: '6px', border: '1.5px solid #fff', color: '#fff', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem', fontFamily: "'DM Sans', sans-serif" }}>
+              <Link to="/dashboard/ordenes" style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 16px', borderRadius: '6px', border: 'none', color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: '0.85rem', fontFamily: "Calibri, 'Segoe UI', sans-serif", background: isSH ? '#4ECBA0' : '#1A4F9C', transition: 'background 200ms ease' }}>
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 {currentUser.user_metadata?.nombre || currentUser.email?.split('@')[0]}
               </Link>
             ) : (
-              <button className="oddy-login-btn" onClick={() => setShowLoginModal(true)}>Ingreso / Registro</button>
+              <button className="core-login-btn" onClick={() => setShowLoginModal(true)}>Ingreso / Registro</button>
             )}
-            <div className="oddy-cart" onClick={() => setShowCart(!showCart)} style={{ cursor: 'pointer', position: 'relative' }}>
+            <div className="core-cart" onClick={() => setShowCart(!showCart)} style={{ cursor: 'pointer', position: 'relative' }}>
               <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <circle cx="9" cy="21" r="1"/>
                 <circle cx="20" cy="21" r="1"/>
                 <path d="M5 1l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M5 1L1 1" strokeLinecap="round"/>
               </svg>
-              {cartItems.length > 0 && <span style={{ position: 'absolute', top: '-6px', right: '-6px', fontSize: '10px', color: isSH ? '#6BB87A' : '#FF6835', fontFamily: "'Arial', sans-serif", fontWeight: 'normal', lineHeight: 1, zIndex: 10 }}>{cartItems.length}</span>}
+              {cartItems.length > 0 && <span style={{ position: 'absolute', top: '-6px', right: '-6px', fontSize: '10px', color: isSH ? '#1D9E75' : '#C9A84C', fontFamily: "'Arial', sans-serif", fontWeight: 'normal', lineHeight: 1, zIndex: 10 }}>{cartItems.length}</span>}
             </div>
           </div>
         </div>
 
         {/* ── BARRA INFERIOR MÓVIL ── */}
-        <div className="oddy-mobile-bottom-bar">
-          <div className="oddy-mobile-logo-small">
+        <div className="core-mobile-bottom-bar">
+          <div className="core-mobile-logo-small">
             <svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid meet">
               <g fill="none" stroke="#ffffff" strokeWidth="9" strokeLinecap="round" strokeLinejoin="round" transform="translate(0, 5)">
                 <path d="M 100 10 L 130 25 L 130 55 L 100 70 L 70 55 L 70 25 Z" />
@@ -2556,18 +2548,18 @@ export default function OddyStorefront() {
             </svg>
           </div>
           <button 
-            className="oddy-market-btn oddy-mobile-market-btn" 
+            className="core-market-btn core-mobile-market-btn" 
             onClick={() => setMode(isSH ? 'mkt' : 'sh')}
           >
             {isSH ? 'Market' : 'Second Hand'}
           </button>
           <button 
-            className="oddy-login-btn oddy-mobile-login-btn-bottom" 
+            className="core-login-btn core-mobile-login-btn-bottom" 
             onClick={() => setShowLoginModal(true)}
           >
             Ingreso / Registro
           </button>
-          <div className="oddy-cart oddy-mobile-cart">
+          <div className="core-cart core-mobile-cart">
             <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.5">
               <circle cx="9" cy="21" r="1"/>
               <circle cx="20" cy="21" r="1"/>
@@ -2592,9 +2584,9 @@ export default function OddyStorefront() {
             </svg>
           </div>
         </div>
-        <div className="oddy-tbr" style={{ marginLeft: 'auto', display: 'none' }}>
-          <div className="oddy-mpill" onClick={() => toggleMode()}>
-            <div className="oddy-mdot" />
+        <div className="core-tbr" style={{ marginLeft: 'auto', display: 'none' }}>
+          <div className="core-mpill" onClick={() => toggleMode()}>
+            <div className="core-mdot" />
             <span>{isSH ? '2DA MANO' : 'MARKET'}</span>
           </div>
 
@@ -2669,7 +2661,7 @@ export default function OddyStorefront() {
 
         </div>
         {/* Menú de categorías */}
-        <div className="oddy-categories-menu">
+        <div className="core-categories-menu">
           {(departamentos || []).map((depto) => {
             const menuItem = depto.nombre;
             const deptoCats = (depto.categorias || []).map((cat) => cat.nombre);
@@ -2677,18 +2669,18 @@ export default function OddyStorefront() {
             return (
               <div
                 key={menuItem}
-                className="oddy-menu-item"
+                className="core-menu-item"
                 onMouseEnter={() => setOpenDropdown(menuItem)}
                 onMouseLeave={() => setOpenDropdown(null)}
               >
                 <span>{menuItem}</span>
 
                 {isOpen && deptoCats.length > 0 && (
-                  <div className="oddy-dropdown">
+                  <div className="core-dropdown">
                     {deptoCats.map((category) => (
                       <div
                         key={category}
-                        className="oddy-dropdown-item"
+                        className="core-dropdown-item"
                         onClick={() => {
                           setSelectedCategory(null);
                           setOpenDropdown(null);
@@ -2704,39 +2696,25 @@ export default function OddyStorefront() {
           })}
         </div>
       </header>
-      {/* Barra de modo */}
-      <div ref={greenBarRef} style={{ position: 'fixed', top: headerHeight + 20, left: 0, right: 0, width: '100%', height: '48px', backgroundColor: isSH ? '#FF6835' : '#6BB87A', transition: 'background-color 0.4s ease', zIndex: 299, display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '12px', paddingRight: '12px' }}>
-        <button onClick={() => setMode(isSH ? 'mkt' : 'sh')} className="oddy-login-btn oddy-mode-btn" style={{ flexShrink: 0, minWidth: '140px', backgroundColor: 'transparent', borderColor: 'rgba(255,255,255,0.6)' }}>
-          {isSH ? '🛍 Market' : '♻️ Second Hand'}
-        </button>
-        <div ref={carouselRef} style={{ display: 'flex', gap: '6px', alignItems: 'center', overflow: 'hidden', height: '100%', padding: '6px 0', flex: 1 }}>
-          {Array(10).fill(null).flatMap(() => (isSH ? MP : SH)).map((p, idx) => (
-            <div key={`c${p.id}-${idx}`} style={{ width: '36px', height: '36px', borderRadius: '6px', overflow: 'hidden', border: '1.5px solid rgba(255,255,255,0.4)', flexShrink: 0, cursor: 'pointer', transition: 'transform 0.2s' }}
-              onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-              onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}>
-              <img src={p.img} alt={p.n} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Barra de modo eliminada v2.0 */}
       {/* DEPT STRIP */}
-      <div className="oddy-dstrip" style={{ display: 'none' }}>
+      <div className="core-dstrip" style={{ display: 'none' }}>
       </div>
 
       {/* MAIN */}
-      <main className="oddy-main" style={isHeroCompact ? { paddingTop: '180px' } : {}}>
+      <main className="core-main" style={isHeroCompact ? { paddingTop: '180px' } : {}}>
         {/* ── MARKET ── */}
         {!isSH && (
           <>
-            <div className="oddy-shdr">
-              <div className="oddy-stitle">DESTACADOS</div>
-              <span className="oddy-slink">Ver más →</span>
+            <div className="core-shdr">
+              <div className="core-stitle">DESTACADOS</div>
+              <span className="core-slink">Ver más →</span>
             </div>
-            <div className="oddy-grid">
+            <div className="core-grid">
               {MP.map(p => {
                 const isInCart = cartItems.some(item => item.id === p.id && item.m === 'mkt');
                 return (
-                  <div key={p.id} className="oddy-card-slot">
+                  <div key={p.id} className="core-card-slot">
                     <FlipCard
                       p={p}
                       onAdd={() => addToCart(p, 'mkt')}
@@ -2755,11 +2733,11 @@ export default function OddyStorefront() {
         {/* ── SEGUNDA MANO ── */}
         {isSH && (
           <>
-            <div className="oddy-shdr">
-              <div className="oddy-stitle">PUBLICACIONES</div>
-              <span className="oddy-slink">Ver todas →</span>
+            <div className="core-shdr">
+              <div className="core-stitle">PUBLICACIONES</div>
+              <span className="core-slink">Ver todas →</span>
             </div>
-            <div className="oddy-grid">
+            <div className="core-grid">
               {SH.map((p, idx) => {
                 const isInCart = cartItems.some(item => item.id === p.id && item.m === 'sh');
                 return (
@@ -2777,14 +2755,14 @@ export default function OddyStorefront() {
                 );
               })}
             </div>
-            <div className="oddy-sp" />
+            <div className="core-sp" />
           </>
         )}
       </main>
       
       {/* ── FOOTER MÓVIL ── */}
-      <footer className="oddy-mobile-footer">
-        <div className="oddy-mobile-footer-logo">
+      <footer className="core-mobile-footer">
+        <div className="core-mobile-footer-logo">
           <svg viewBox="0 0 200 120" width="67" height="40" style={{ display: 'block' }}>
             <g fill="none" stroke="#ffffff" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" transform="translate(0, 5)">
               <path d="M 100 10 L 130 25 L 130 55 L 100 70 L 70 55 L 70 25 Z" />
@@ -2793,7 +2771,7 @@ export default function OddyStorefront() {
             </g>
           </svg>
         </div>
-        <div className="oddy-mobile-footer-cart" onClick={() => setShowCart(!showCart)}>
+        <div className="core-mobile-footer-cart" onClick={() => setShowCart(!showCart)}>
           <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5">
             <circle cx="9" cy="21" r="1"/>
             <circle cx="20" cy="21" r="1"/>
@@ -2970,4 +2948,12 @@ export default function OddyStorefront() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
 

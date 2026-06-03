@@ -1,10 +1,10 @@
-﻿import { EmpresaConfig } from "../types";
+import { EmpresaConfig } from "../types";
 
 export const DEFAULT_EMPRESA: EmpresaConfig = {
   nombre:    "Charlie Market",
   color:     "#FF7A00",
   web:       "charliemarket.com.uy",
-  email:     "soporte@oddy.com.uy",
+  email:     "soporte@core.lat",
 };
 
 export function fmtFecha(iso?: string): string {
