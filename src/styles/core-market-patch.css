@@ -259,3 +259,13 @@ body { font-family: var(--font-base) !important; }
   height: 41px !important;
   padding-bottom: 5px !important;
 }
+
+/* Línea entre header y menú — dentro del core-tb */
+.core-header {
+  border-bottom: 2px solid #C9A84C !important;
+}
+[data-sh="true"]  .core-header { border-bottom-color: #1D9E75 !important; }
+[data-sh="false"] .core-header { border-bottom-color: #C9A84C !important; }
+
+/* Quitar el ::after anterior */
+.core-tb::after { display: none !important; }
