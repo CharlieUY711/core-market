@@ -269,3 +269,7 @@ body { font-family: var(--font-base) !important; }
 
 /* Quitar el ::after anterior */
 .core-tb::after { display: none !important; }
+
+/* Línea separadora — color cruzado con el botón de modo */
+[data-sh="false"] .core-header { border-bottom-color: #1D9E75 !important; }
+[data-sh="true"]  .core-header { border-bottom-color: #1A4F9C !important; }
