@@ -732,10 +732,14 @@ function FlipCard({ p, onAdd, onFlipped, deptColors, cartItems, isInCart }: {
           </div>
 
           <div className="core-bottom">
-            <button className="core-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={{...(p.stock===0?{background:'#ccc',cursor:'not-allowed',color:'#888'}:btnStyle),display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 10px',width:'100%',gap:'6px'}}>
-              <span style={{fontSize:'0.68rem',fontWeight:700,textTransform:'uppercase',flexShrink:0,pointerEvents:'none'}}>{p.d}</span>
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-              <span style={{fontSize:'0.72rem',fontWeight:800,textTransform:'uppercase',flexShrink:0,pointerEvents:'none'}}>{p.stock===0?'Sin stock':'COMPRAR'}</span>
+            <button className="core-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={{...(p.stock===0?{background:'#ccc',cursor:'not-allowed',color:'#888'}:btnStyle),display:'flex',alignItems:'center',padding:'0',width:'100%',gap:'0'}}>
+              <span style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.68rem',fontWeight:700,textTransform:'uppercase',pointerEvents:'none'}}>{p.d}</span><span style={{width:'1px',background:'rgba(0,0,0,.3)',alignSelf:'stretch'}}></span>
+              <span style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:'6px',pointerEvents:'none'}}>
+  <button onClick={(e)=>{e.stopPropagation();}} style={{background:'transparent',border:'none',color:'#fff',cursor:'pointer',fontSize:'12px',padding:'0 2px',pointerEvents:'all',opacity:0.8}}>−</button>
+  <span style={{fontSize:'0.72rem',fontWeight:700,minWidth:'14px',textAlign:'center'}}>1</span>
+  <button onClick={(e)=>{e.stopPropagation();}} style={{background:'transparent',border:'none',color:'#fff',cursor:'pointer',fontSize:'12px',padding:'0 2px',pointerEvents:'all',opacity:0.8}}>+</button>
+  <span style={{fontSize:'0.72rem',fontWeight:800,textTransform:'uppercase',marginLeft:'4px'}}>{p.stock===0?'Sin stock':'COMPRAR'}</span>
+</span>
             </button>
           </div>
         </div>
@@ -937,10 +941,14 @@ function FlipCard({ p, onAdd, onFlipped, deptColors, cartItems, isInCart }: {
             </div>
           </div>
           <div className="core-bottom">
-            <button className="core-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={{...(p.stock===0?{background:'#ccc',cursor:'not-allowed',color:'#888'}:btnStyle),display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 10px',width:'100%',gap:'6px'}}>
-              <span style={{fontSize:'0.68rem',fontWeight:700,textTransform:'uppercase',flexShrink:0,pointerEvents:'none'}}>{p.d}</span>
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-              <span style={{fontSize:'0.72rem',fontWeight:800,textTransform:'uppercase',flexShrink:0,pointerEvents:'none'}}>{p.stock===0?'Sin stock':'COMPRAR'}</span>
+            <button className="core-add-btn" onClick={handleAdd} disabled={p.stock === 0} style={{...(p.stock===0?{background:'#ccc',cursor:'not-allowed',color:'#888'}:btnStyle),display:'flex',alignItems:'center',padding:'0',width:'100%',gap:'0'}}>
+              <span style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.68rem',fontWeight:700,textTransform:'uppercase',pointerEvents:'none'}}>{p.d}</span><span style={{width:'1px',background:'rgba(0,0,0,.3)',alignSelf:'stretch'}}></span>
+              <span style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',gap:'6px',pointerEvents:'none'}}>
+  <button onClick={(e)=>{e.stopPropagation();}} style={{background:'rgba(255,255,255,.2)',border:'none',color:'#fff',width:'18px',height:'18px',borderRadius:'3px',cursor:'pointer',fontSize:'14px',display:'flex',alignItems:'center',justifyContent:'center',pointerEvents:'all'}}>−</button>
+  <span style={{fontSize:'0.72rem',fontWeight:700,minWidth:'14px',textAlign:'center'}}>1</span>
+  <button onClick={(e)=>{e.stopPropagation();}} style={{background:'rgba(255,255,255,.2)',border:'none',color:'#fff',width:'18px',height:'18px',borderRadius:'3px',cursor:'pointer',fontSize:'14px',display:'flex',alignItems:'center',justifyContent:'center',pointerEvents:'all'}}>+</button>
+  <span style={{fontSize:'0.72rem',fontWeight:800,textTransform:'uppercase',marginLeft:'4px'}}>{p.stock===0?'Sin stock':'COMPRAR'}</span>
+</span>
             </button>
           </div>
         </div>
