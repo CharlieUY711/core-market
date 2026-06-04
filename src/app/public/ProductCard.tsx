@@ -810,7 +810,7 @@ function FlipCard({ p, onAdd, onFlipped, deptColors, cartItems, isInCart }: {
             {/* Barra de color del departamento */}
             <div style={{ 
               width: 'calc(100% + 16px)', 
-              height: '11.5px', 
+              height: '5px', 
               backgroundColor: deptColors[p.d] || '#C8C4BE',
               marginLeft: '-8px',
               marginRight: '-8px',
@@ -953,6 +953,10 @@ function FlipCard({ p, onAdd, onFlipped, deptColors, cartItems, isInCart }: {
 // ── SH Slide Card ─────────────────────────────────────────────────────────────
 
 export { Dots, Stars, FlipCard };
+
+
+
+
 
 
 

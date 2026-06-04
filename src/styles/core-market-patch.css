@@ -144,3 +144,15 @@
 .core-cs-thumb:hover { border-color: #0D2B55 !important; }
 .core-panel-miniatures img,
 .core-fb img[style*="border"] { border-color: #1A4F9C !important; }
+
+/* Botón COMPRAR — esquinas rectas arriba, redondeadas abajo, efecto volumen */
+.core-add-btn {
+  border-radius: 0 0 6px 6px !important;
+  box-shadow: 0 3px 0 rgba(0,0,0,.25) !important;
+  transform: translateY(0) !important;
+  transition: transform 100ms ease, box-shadow 100ms ease !important;
+}
+.core-add-btn:active:not(:disabled) {
+  transform: translateY(2px) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,.25) !important;
+}
