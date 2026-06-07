@@ -1,4 +1,4 @@
-﻿export function wrapHTML(title: string, styles: string, body: string, autoPrint = false): string {
+export function wrapHTML(title: string, styles: string, body: string, autoPrint = false): string {
   const printScript = autoPrint
     ? `<script>window.onload=()=>setTimeout(()=>window.print(),800);</script>`
     : "";
@@ -14,3 +14,6 @@ ${printScript}
 <body>${body}</body>
 </html>`;
 }
+
+
+

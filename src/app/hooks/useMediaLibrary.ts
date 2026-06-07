@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "../../utils/supabase/client";
 
 export type MediaTipo      = "imagen" | "video" | "documento";
@@ -107,3 +107,6 @@ export function useMediaLibrary(filter: MediaFilter = {}) {
 
   return { items, loading, error, reload: load, deleteItem, stats };
 }
+
+
+

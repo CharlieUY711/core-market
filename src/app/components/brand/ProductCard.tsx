@@ -1,4 +1,4 @@
-﻿import { SecondHandBadge, PriceBadge, StatusBadge } from "./Brand";
+import { SecondHandBadge, PriceBadge, StatusBadge } from "./Brand";
 
 export interface ProductCardData {
   id:               string;
@@ -130,3 +130,4 @@ export default function ProductCard({ producto: p, onClick, compact = false }: P
     </div>
   );
 }
+

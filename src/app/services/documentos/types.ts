@@ -1,4 +1,4 @@
-﻿// ── Tipos base ───────────────────────────────────────────────────────────────
+// ── Tipos base ───────────────────────────────────────────────────────────────
 
 export type TipoDocumento =
   | "ticket"
@@ -92,3 +92,6 @@ export interface DocumentoResult {
   ventaId:   string;
   error?:    string;
 }
+
+
+

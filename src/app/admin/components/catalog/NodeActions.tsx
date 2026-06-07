@@ -41,3 +41,5 @@ function Btn({ color, bg, textColor, onClick, title, children }: any) {
     </button>
   );
 }
+
+

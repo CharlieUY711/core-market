@@ -1,4 +1,4 @@
-﻿import { DocumentTemplate, RenderContext } from "../types";
+import { DocumentTemplate, RenderContext } from "../types";
 import { baseStyles }      from "../blocks/styles";
 import { blockHeader }     from "../blocks/header";
 import { blockPersona }    from "../blocks/persona";
@@ -46,3 +46,6 @@ export const remitoTemplate: DocumentTemplate = {
     return wrapHTML("Remito", baseStyles(color, opts.formato), body, opts.autoPrint);
   }
 };
+
+
+

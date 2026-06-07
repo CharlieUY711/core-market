@@ -1,4 +1,4 @@
-﻿export type ProductoTipo       = "market" | "secondhand";
+export type ProductoTipo       = "market" | "secondhand";
 export type ProductoStatus     = "draft" | "active" | "paused" | "inactive" | "deleted";
 export type ProductoMoneda     = "UYU" | "USD" | "EUR";
 export type ProductoCondicion  = "Nuevo"|"Excelente"|"Muy bueno"|"Bueno"|"Regular"|"Para reparar";
@@ -127,3 +127,6 @@ export interface ValidacionResult {
   ok:      boolean;
   errores: ValidacionError[];
 }
+
+
+

@@ -1,4 +1,4 @@
-﻿import { DocumentTemplate, RenderContext } from "../types";
+import { DocumentTemplate, RenderContext } from "../types";
 import { baseStyles } from "../blocks/styles";
 import { blockQR }    from "../blocks/qr";
 import { wrapHTML }   from "../blocks/wrap";
@@ -71,3 +71,6 @@ export const etiquetaEnvioTemplate: DocumentTemplate = {
     return wrapHTML("Etiqueta de Envío", baseStyles("#000", "etiqueta"), body, opts.autoPrint);
   }
 };
+
+
+

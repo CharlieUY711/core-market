@@ -1,4 +1,4 @@
-﻿import { DocumentTemplate, RenderContext } from "../types";
+import { DocumentTemplate, RenderContext } from "../types";
 import { baseStyles }      from "../blocks/styles";
 import { blockHeader }     from "../blocks/header";
 import { blockPersona }    from "../blocks/persona";
@@ -56,3 +56,6 @@ export const acuseReciboTemplate: DocumentTemplate = {
     return wrapHTML("Acuse de Recibo", baseStyles(color, opts.formato), body, opts.autoPrint);
   }
 };
+
+
+

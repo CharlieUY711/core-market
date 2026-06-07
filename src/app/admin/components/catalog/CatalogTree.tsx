@@ -25,3 +25,5 @@ const CatalogTree = memo(({ nodes, isAdmin, onAdd, onEdit, onDelete, onToggle, d
 });
 
 export default CatalogTree;
+
+

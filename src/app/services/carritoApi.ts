@@ -85,3 +85,7 @@ export async function vaciarCarrito(): Promise<void> {
   const { error } = await supabase.from("carrito").delete().eq("sesion_id", sesionId);
   if (error) throw error;
 }
+
+
+
+

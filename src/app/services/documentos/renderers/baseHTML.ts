@@ -131,3 +131,7 @@ ${autoPrint ? `<script>window.onload=()=>setTimeout(()=>window.print(),800)</scr
 <body>${body}</body>
 </html>`;
 }
+
+
+
+

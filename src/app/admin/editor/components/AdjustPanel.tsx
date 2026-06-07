@@ -1,4 +1,4 @@
-﻿import { useEditorStore } from "../engine/useEditorStore";
+import { useEditorStore } from "../engine/useEditorStore";
 
 type SliderKey = "brightness"|"contrast"|"exposure"|"saturation"|"temperature"|"tint"|"sharpness"|"blur";
 
@@ -98,3 +98,4 @@ export default function AdjustPanel() {
     </div>
   );
 }
+

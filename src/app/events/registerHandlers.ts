@@ -1,4 +1,4 @@
-﻿import { eventBus }                from "./eventBus";
+import { eventBus }                from "./eventBus";
 import { handleVentaPagada }       from "../services/ventas/handlers/handleVentaPagada";
 import { handleVentaPreparando }   from "../services/ventas/handlers/handleVentaPreparando";
 import { handleVentaEnviada }      from "../services/ventas/handlers/handleVentaEnviada";
@@ -52,3 +52,6 @@ export function registerAllHandlers(): void {
 
   console.info("[EventBus] Handlers registrados:", eventBus.describe());
 }
+
+
+

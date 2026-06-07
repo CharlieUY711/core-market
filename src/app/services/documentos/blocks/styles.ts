@@ -1,4 +1,4 @@
-﻿import { FormatoDocumento } from "../types";
+import { FormatoDocumento } from "../types";
 
 export function baseStyles(color: string, formato: FormatoDocumento): string {
   const pageSize  = formato === "etiqueta" ? "100mm 150mm" : formato === "a5" ? "A5" : "A4";
@@ -43,3 +43,6 @@ export function baseStyles(color: string, formato: FormatoDocumento): string {
     }
   `;
 }
+
+
+

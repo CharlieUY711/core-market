@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../../../utils/supabase/client";
 
 const ACCENT = "#FF7A00";
@@ -325,3 +325,4 @@ export default function AdminExport() {
     </div>
   );
 }
+

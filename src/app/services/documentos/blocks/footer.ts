@@ -1,4 +1,4 @@
-﻿import { EmpresaConfig } from "../types";
+import { EmpresaConfig } from "../types";
 
 export function blockFooter(empresa: EmpresaConfig): string {
   const parts = [empresa.nombre, empresa.email, empresa.telefono, empresa.web].filter(Boolean);
@@ -17,3 +17,6 @@ export function blockFirma(label = "Firma y aclaración"): string {
       <div style="font-size:0.75em;color:#aaa">Nombre completo y fecha</div>
     </div>`;
 }
+
+
+

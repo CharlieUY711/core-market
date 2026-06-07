@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useEditorStore } from "../engine/useEditorStore";
 
 const ACCENT = "#FF7A00";
@@ -52,3 +52,4 @@ export default function HistoryPanel() {
     </div>
   );
 }
+

@@ -28,3 +28,7 @@ export function buildContext(
 
   return { data, opts: merged, empresa, color, fecha };
 }
+
+
+
+

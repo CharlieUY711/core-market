@@ -1,4 +1,4 @@
-﻿import { ItemDoc } from "../types";
+import { ItemDoc } from "../types";
 import { fmtMonto, calcTotal } from "./utils";
 
 export function blockItemsTable(items: ItemDoc[], moneda = "UYU"): string {
@@ -40,3 +40,6 @@ export function blockItemsTable(items: ItemDoc[], moneda = "UYU"): string {
       </tbody>
     </table>`;
 }
+
+
+

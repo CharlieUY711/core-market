@@ -1,4 +1,4 @@
-﻿import { supabase } from "../../utils/supabase/client";
+import { supabase } from "../../utils/supabase/client";
 
 export type TipoDocumento = "ticket" | "remito" | "etiqueta_envio" | "acuse_recibo";
 
@@ -35,3 +35,6 @@ export async function generarDocumento(
     return null;
   }
 }
+
+
+

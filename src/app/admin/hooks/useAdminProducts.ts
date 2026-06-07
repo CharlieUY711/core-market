@@ -34,3 +34,7 @@ export function useAdminProducts() {
   useEffect(() => { refetch(); }, []);
   return { products, loading, error, refetch, updateProduct, pauseProduct, fixStock };
 }
+
+
+
+

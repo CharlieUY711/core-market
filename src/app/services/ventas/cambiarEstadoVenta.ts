@@ -1,4 +1,4 @@
-﻿import { supabase }                          from "../../utils/supabase/client";
+import { supabase }                          from "../../utils/supabase/client";
 import { VentaEstado, CambioEstadoResult }   from "./types";
 import { eventBus }                          from "../../events/eventBus";
 import { registerAllHandlers }               from "../../events/registerHandlers";
@@ -78,3 +78,6 @@ export async function cambiarEstadoVenta(
     return { ok: false, estado: "pendiente", error: e.message };
   }
 }
+
+
+

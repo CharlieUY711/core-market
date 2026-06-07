@@ -1,4 +1,4 @@
-﻿export function fmtMonto(n: number, moneda = "UYU", locale = "es-UY"): string {
+export function fmtMonto(n: number, moneda = "UYU", locale = "es-UY"): string {
   return `${moneda} ${n.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
@@ -23,3 +23,6 @@ export function calcTotal(items: { cantidad: number; precioUnit: number; descuen
     return sum + sub - desc;
   }, 0);
 }
+
+
+

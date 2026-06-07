@@ -1,4 +1,4 @@
-﻿import { supabase }               from "../../../utils/supabase/client";
+import { supabase }               from "../../../utils/supabase/client";
 import { generarYSubirDocumento } from "../../documentos/generateDocumentHTML";
 import { DocumentoData }          from "../../documentos/types";
 
@@ -66,3 +66,6 @@ export async function handleVentaEnviada(ventaId: string): Promise<void> {
 
   console.log(`[handleVentaEnviada] ✓ etiqueta generada y enviada a impresora: ${etiquetaUrl}`);
 }
+
+
+

@@ -1,4 +1,4 @@
-﻿import { useRef, useEffect, useCallback, useState } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import { useEditorStore } from "../engine/useEditorStore";
 import { buildCSSFilter } from "../engine/filters";
 
@@ -235,3 +235,4 @@ export default function EditCanvas({ canvasRef, onRender }: Props) {
     </div>
   );
 }
+

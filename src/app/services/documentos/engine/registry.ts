@@ -1,4 +1,4 @@
-﻿import { DocumentTemplate, TipoDocumento } from "../types";
+import { DocumentTemplate, TipoDocumento } from "../types";
 
 class DocumentRegistry {
   private templates: Map<TipoDocumento, DocumentTemplate> = new Map();
@@ -36,3 +36,6 @@ class DocumentRegistry {
 
 // Singleton global
 export const documentRegistry = new DocumentRegistry();
+
+
+

@@ -1,4 +1,4 @@
-﻿import { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import AdminBiblioteca from "../pages/AdminBiblioteca";
 import { supabase } from "../../../utils/supabase/client";
 
@@ -272,3 +272,4 @@ export default function SelectorMediaArticulo({
     </div>
   );
 }
+

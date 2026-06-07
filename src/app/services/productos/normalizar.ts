@@ -1,4 +1,4 @@
-﻿import { ProductoInput, ProductoStatus, AtributoDefinicion } from "./types";
+import { ProductoInput, ProductoStatus, AtributoDefinicion } from "./types";
 import { validarProductoAntesPublicar } from "./validar";
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -180,3 +180,6 @@ export function diffProducto(
 
   return diff;
 }
+
+
+

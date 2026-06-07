@@ -39,3 +39,5 @@ export function userMessage(error: unknown): string {
   }
   return "Ocurrió un error inesperado";
 }
+
+

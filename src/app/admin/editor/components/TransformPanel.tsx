@@ -1,4 +1,4 @@
-﻿import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import { useEditorStore } from "../engine/useEditorStore";
 
 const ACCENT = "#FF7A00";
@@ -223,3 +223,5 @@ export default function TransformPanel() {
 }
 
 function gcd(a: number, b: number): number { return b === 0 ? a : gcd(b, a % b); }
+
+

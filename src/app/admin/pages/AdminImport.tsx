@@ -1,4 +1,4 @@
-﻿import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import { supabase } from "../../../utils/supabase/client";
 
 const ACCENT = "#FF7A00";
@@ -640,3 +640,4 @@ export default function AdminImport() {
     </div>
   );
 }
+

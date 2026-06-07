@@ -1,4 +1,4 @@
-﻿import { create } from "zustand";
+import { create } from "zustand";
 
 export interface EditorState {
   brightness: number; contrast: number; exposure: number;
@@ -87,3 +87,7 @@ export const useEditorStore = create<EditorState & EditorActions>((s, g) => ({
     setTimeout(() => g().saveHistory("Reset"), 0);
   }
 }));
+
+
+
+

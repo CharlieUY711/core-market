@@ -161,3 +161,5 @@ const CatalogNodeRow = memo(({ node, isAdmin, onAdd, onEdit, onDelete, onToggle,
     </div>
   );
 });
+
+

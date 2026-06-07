@@ -1,4 +1,4 @@
-﻿import { supabase }          from "../../utils/supabase/client";
+import { supabase }          from "../../utils/supabase/client";
 import { TipoDocumento, DocumentoData, RenderOptions, DocumentoResult } from "./types";
 import { documentRegistry }  from "./engine/registry";
 import { buildContext }       from "./engine/context";
@@ -89,3 +89,6 @@ export function previewDocumento(
 // ── Para agregar templates desde fuera del módulo ─────────────────────────────
 export { documentRegistry } from "./engine/registry";
 export type { DocumentTemplate } from "./types";
+
+
+

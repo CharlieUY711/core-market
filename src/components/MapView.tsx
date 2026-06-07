@@ -23,3 +23,5 @@ export default function MapView({ products }) {
 
   return <div ref={ref} style={{ height: 400 }} />
 }
+
+

@@ -27,3 +27,7 @@ export async function removeBg(
     isLoading = false;
   }
 }
+
+
+
+

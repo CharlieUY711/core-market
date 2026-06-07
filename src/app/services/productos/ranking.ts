@@ -1,4 +1,4 @@
-﻿import { supabase } from "../../utils/supabase/client";
+import { supabase } from "../../utils/supabase/client";
 
 // ── Tipos ────────────────────────────────────────────────────────────────────
 
@@ -221,3 +221,6 @@ export function useProductosRankeados(params: QueryRankingParams = {}) {
 
   return { productos, loading, error, refetch: fetch };
 }
+
+
+

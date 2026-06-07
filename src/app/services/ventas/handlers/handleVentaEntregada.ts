@@ -1,4 +1,4 @@
-﻿import { supabase }               from "../../../utils/supabase/client";
+import { supabase }               from "../../../utils/supabase/client";
 import { generarYSubirDocumento } from "../../documentos/generateDocumentHTML";
 import { DocumentoData }          from "../../documentos/types";
 
@@ -78,3 +78,6 @@ export async function handleVentaEntregada(ventaId: string): Promise<void> {
 
   console.log(`[handleVentaEntregada] ✓ acuse generado: ${acuseUrl}`);
 }
+
+
+

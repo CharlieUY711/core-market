@@ -1,4 +1,4 @@
-﻿import { supabase }               from "../../../utils/supabase/client";
+import { supabase }               from "../../../utils/supabase/client";
 import { generarYSubirDocumento } from "../../documentos/generateDocumentHTML";
 import { DocumentoData }          from "../../documentos/types";
 
@@ -61,3 +61,6 @@ export async function handleVentaPreparando(ventaId: string): Promise<void> {
 
   console.log(`[handleVentaPreparando] ✓ remito generado: ${remitoUrl}`);
 }
+
+
+

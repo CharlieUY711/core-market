@@ -326,3 +326,7 @@ export async function deleteProductoSecondHand(id: string): Promise<void> {
   }
 }
 
+
+
+
+

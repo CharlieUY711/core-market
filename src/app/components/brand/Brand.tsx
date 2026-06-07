@@ -1,4 +1,4 @@
-﻿export const BRAND = {
+export const BRAND = {
   name:        "Charlie Market",
   nameShort:   "Charlie",
   secondHand:  "Second Hand",
@@ -93,3 +93,4 @@ export function Toast({ text, type = "ok" }:
     </div>
   );
 }
+

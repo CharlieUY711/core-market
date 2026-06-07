@@ -1,4 +1,4 @@
-﻿export type VentaEstado =
+export type VentaEstado =
   | "pendiente"
   | "pagado"
   | "preparando"
@@ -23,3 +23,6 @@ export interface CambioEstadoResult {
   error?:  string;
   data?:   Record<string, unknown>;
 }
+
+
+

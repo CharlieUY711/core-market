@@ -1,4 +1,4 @@
-﻿import { PersonaDoc } from "../types";
+import { PersonaDoc } from "../types";
 
 export function blockPersona(label: string, p?: PersonaDoc): string {
   if (!p) return `<div><div class="doc-label">${label}</div><div style="color:#aaa;font-size:0.85em">—</div></div>`;
@@ -13,3 +13,6 @@ export function blockPersona(label: string, p?: PersonaDoc): string {
       ${p.docId     ? `<div style="font-size:0.75em;color:#999">Doc: ${p.docId}</div>` : ""}
     </div>`;
 }
+
+
+

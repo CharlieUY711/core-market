@@ -1,4 +1,4 @@
-﻿import { useEditorStore } from "../engine/useEditorStore";
+import { useEditorStore } from "../engine/useEditorStore";
 
 export default function OriginalCanvas() {
   const store = useEditorStore();
@@ -57,3 +57,4 @@ export default function OriginalCanvas() {
     </div>
   );
 }
+

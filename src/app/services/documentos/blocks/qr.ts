@@ -1,4 +1,4 @@
-﻿import { qrUrl, shortId } from "./utils";
+import { qrUrl, shortId } from "./utils";
 
 export function blockQR(data: string, ventaId: string, size = 80): string {
   return `
@@ -9,3 +9,6 @@ export function blockQR(data: string, ventaId: string, size = 80): string {
       </div>
     </div>`;
 }
+
+
+

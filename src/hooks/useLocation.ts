@@ -6,3 +6,7 @@ export async function fetchNearby(lat, lng) {
 
   return res.json()
 }
+
+
+
+

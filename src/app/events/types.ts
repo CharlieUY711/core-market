@@ -1,4 +1,4 @@
-﻿export interface VentaEventPayload {
+export interface VentaEventPayload {
   ventaId:     string;
   vendedorId?: string;
   compradorId?: string;
@@ -24,3 +24,6 @@ export type EventPayloadMap = {
 };
 
 export type EventName = keyof EventPayloadMap;
+
+
+

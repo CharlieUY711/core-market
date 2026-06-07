@@ -1,4 +1,4 @@
-﻿import { supabase } from '../../utils/supabase/client';
+import { supabase } from '../../utils/supabase/client';
 
 export interface Categoria {
   id:     string;
@@ -44,3 +44,7 @@ export async function deleteDepartamento(id: string) {
   const { error } = await supabase.from('departamentos').delete().eq('id', id);
   if (error) throw new Error(error.message);
 }
+
+
+
+

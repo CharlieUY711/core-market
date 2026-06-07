@@ -1,4 +1,4 @@
-﻿import { Producto, ProductoInput, AtributoDefinicion, ValidacionResult, ValidacionError } from "./types";
+import { Producto, ProductoInput, AtributoDefinicion, ValidacionResult, ValidacionError } from "./types";
 
 export function validarProductoAntesPublicar(
   producto: Partial<ProductoInput>,
@@ -101,3 +101,6 @@ export function validarBorrador(producto: Partial<ProductoInput>): ValidacionRes
     errores.push({ campo: "tipo", mensaje: "El tipo es obligatorio" });
   return { ok: errores.length === 0, errores };
 }
+
+
+

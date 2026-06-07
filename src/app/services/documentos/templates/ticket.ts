@@ -1,4 +1,4 @@
-﻿import { DocumentTemplate, RenderContext } from "../types";
+import { DocumentTemplate, RenderContext } from "../types";
 import { baseStyles }    from "../blocks/styles";
 import { blockHeader }   from "../blocks/header";
 import { blockPersona }  from "../blocks/persona";
@@ -53,3 +53,6 @@ export const ticketTemplate: DocumentTemplate = {
     return wrapHTML("Ticket de Compra", baseStyles(color, opts.formato), body, opts.autoPrint);
   }
 };
+
+
+

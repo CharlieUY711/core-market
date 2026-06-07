@@ -1,4 +1,4 @@
-﻿import { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useEditorStore } from "./engine/useEditorStore";
 import EditCanvas     from "./components/EditCanvas";
 import OriginalCanvas from "./components/OriginalCanvas";
@@ -223,3 +223,4 @@ export default function EditorPage() {
     </div>
   );
 }
+

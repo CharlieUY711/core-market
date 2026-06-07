@@ -42,3 +42,7 @@ export const NODE_LABELS: Record<string, string> = {
   node:        "Nodo",
   product:     "Producto",
 };
+
+
+
+

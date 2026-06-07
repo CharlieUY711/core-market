@@ -57,3 +57,7 @@ export function formatearPrecio(monto: number, moneda: "UYU" | "USD"): string {
   }
   return "$U " + Math.round(monto).toLocaleString("es-UY");
 }
+
+
+
+

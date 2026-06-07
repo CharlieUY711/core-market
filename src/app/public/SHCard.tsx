@@ -1327,3 +1327,5 @@ function SlideCard({ p, isOpen, dir, onToggle, onAdd, deptColors, cartItems, isI
 // ── Cross-sell sticky bar ─────────────────────────────────────────────────────
 
 export { SlideCard };
+
+

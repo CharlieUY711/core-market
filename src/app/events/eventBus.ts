@@ -1,4 +1,4 @@
-﻿import { EventName, EventPayloadMap } from "./types";
+import { EventName, EventPayloadMap } from "./types";
 
 type Handler<T> = (payload: T) => Promise<void>;
 
@@ -105,3 +105,6 @@ class EventBus {
 }
 
 export const eventBus = new EventBus();
+
+
+
