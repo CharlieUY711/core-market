@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState, createContext, useContext } from "react";
+import { useEffect, useRef, useState, createContext, useContext } from "react";
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../../../utils/supabase/client";
 import { useUserRole } from "../hooks/useUserRole";
@@ -73,24 +73,39 @@ export default function AdminLayout() {
   const [topStats, setTopStats] = useState<{label:string;value:number|string;color:string}[]>([]);
 
   const commonMenu = [
-    { path: "/admin",               label: "📊 Dashboard",         exact: true },
-    { path: "/admin/orders",        label: "🛍 Mis órdenes"                     },
-    { path: "/admin/publicaciones", label: "♻️ Mis publicaciones"               },
-    { path: "/admin/biblioteca",    label: "🗂 Biblioteca"                      },
-    { path: "/admin/editor",        label: "🎨 Editor"                         },
-    { path: "/admin/import",        label: "📥 Importar"                       },
-    { path: "/admin/export",        label: "📤 Exportar"                       },
-    { path: "/admin/profile",       label: "👤 Mi perfil"                      },
+    { path: "/admin",               label: "📊 Dashboard",        exact: true },
+    { path: "/admin/orders",        label: "🛍 Mis órdenes"                    },
+    { path: "/admin/publicaciones", label: "♻️ Mis publicaciones"              },
+    { path: "/admin/biblioteca",    label: "🗂 Biblioteca"                     },
+    { path: "/admin/editor",        label: "🎨 Editor"                        },
+    { path: "/admin/import",        label: "📥 Importar"                      },
+    { path: "/admin/export",        label: "📤 Exportar"                      },
+    { path: "/admin/profile",       label: "👤 Mi perfil"                     },
   ];
-  const adminMenu = [
-    { path: "/admin/catalog", label: "📋 Catálogo", children: [{ path: "/admin/catalog/articulos", label: "📝 Artículos" }] },
-    { path: "/admin/analytics", label: "📈 Analytics" },
-    { path: "/admin/ml",        label: "🟡 MercadoLibre" },
-    { path: "/admin/api-vault", label: "🔑 API Vault" },
+
+  // Secciones del menú admin con separadores
+  const adminSections = [
+    {
+      section: "Gestión",
+      items: [
+        { path: "/admin/catalog", label: "📋 Catálogo", children: [{ path: "/admin/catalog/articulos", label: "📝 Artículos" }] },
+        { path: "/admin/analytics", label: "📈 Analytics" },
+      ],
+    },
+    {
+      section: "Integraciones",
+      items: [
+        { path: "/admin/ml",        label: "🔌 ML & MercadoPago" },
+        { path: "/admin/api-vault", label: "🔑 API Vault"        },
+      ],
+    },
   ];
 
   const isActive = (path: string, exact?: boolean) =>
     exact ? location.pathname === path : location.pathname.startsWith(path);
+
+  // Para el título del header — lista plana de todos los items
+  const allAdminItems = adminSections.flatMap(s => s.items);
 
   if (loading) return (
     <div style={{ minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center", background:SIDEBAR_BG }}>
@@ -119,6 +134,8 @@ export default function AdminLayout() {
         </div>
         <UserAvatar user={user} isAdmin={isAdmin} />
         <nav style={{ flex:1, overflowY:"auto", padding:"0.75rem 0" }}>
+
+          {/* Menú común */}
           {commonMenu.map(item => {
             const active = isActive(item.path, item.exact);
             return (
@@ -131,11 +148,16 @@ export default function AdminLayout() {
               }}>{item.label}</Link>
             );
           })}
-          {isAdmin && (
-            <>
-              <div style={{ padding:"0.75rem 1.5rem 0.25rem", fontSize:"0.6rem", color:"rgba(255,255,255,0.3)",
-                textTransform:"uppercase", letterSpacing:".1em", fontWeight:700 }}>Admin</div>
-              {adminMenu.map(item => {
+
+          {/* Secciones admin */}
+          {isAdmin && adminSections.map(({ section, items }) => (
+            <div key={section}>
+              {/* Separador de sección */}
+              <div style={{ padding:"0.75rem 1.5rem 0.25rem", fontSize:"0.6rem",
+                color:"rgba(255,255,255,0.3)", textTransform:"uppercase",
+                letterSpacing:".1em", fontWeight:700 }}>{section}</div>
+
+              {items.map(item => {
                 const active = isActive(item.path);
                 return (
                   <div key={item.path}>
@@ -146,7 +168,7 @@ export default function AdminLayout() {
                       borderLeft: active ? "3px solid " + ACCENT : "3px solid transparent",
                       fontWeight: active ? 600 : 400, transition:"all 0.12s",
                     }}>{item.label}</Link>
-                    {item.children && active && item.children.map((child: any) => (
+                    {"children" in item && item.children && active && item.children.map((child: any) => (
                       <Link key={child.path} to={child.path} style={{
                         display:"block", padding:"0.45rem 1.5rem 0.45rem 2.5rem",
                         textDecoration:"none", fontSize:"0.8rem",
@@ -157,9 +179,10 @@ export default function AdminLayout() {
                   </div>
                 );
               })}
-            </>
-          )}
+            </div>
+          ))}
         </nav>
+
         <div style={{ padding:"1rem 1.5rem", borderTop:"1px solid rgba(255,255,255,0.08)" }}>
           <button onClick={handleLogout} style={{
             width:"100%", padding:"0.5rem", background:"rgba(255,255,255,0.06)",
@@ -176,8 +199,8 @@ export default function AdminLayout() {
           position:"sticky", top:0, zIndex:10, boxShadow:"0 2px 8px rgba(0,0,0,.2)" }}>
           <h1 style={{ margin:0, fontSize:"1rem", fontWeight:700, color:"rgba(255,255,255,0.9)", whiteSpace:"nowrap" }}>
             {(() => {
-              const all = [...commonMenu, ...adminMenu];
-              const found = all.find(m => isActive(m.path, m.exact));
+              const all = [...commonMenu, ...allAdminItems];
+              const found = all.find(m => isActive(m.path, (m as any).exact));
               return found?.label?.split(" ").slice(1).join(" ") || "Dashboard";
             })()}
           </h1>
@@ -223,5 +246,3 @@ export default function AdminLayout() {
     </div>
   );
 }
-
-
