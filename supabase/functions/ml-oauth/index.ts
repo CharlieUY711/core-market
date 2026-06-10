@@ -87,23 +87,21 @@ async function vaultSave(
   return data
 }
 
-Deno.serve(async (req: Request) => {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors })
+Deno.serve(async (req_raw: Request) => {
+  if (req_raw.method === 'OPTIONS') return new Response('ok', { headers: cors })
 
-const url     = new URL(req.url)
-const action  = url.searchParams.get('action') ?? (await _bodyField(req, 'action'))
+  const url        = new URL(req_raw.url)
+  const action     = url.searchParams.get('action') ?? (await _bodyField(req_raw, 'action'))
+  const queryToken = url.searchParams.get('token')
+  const req        = queryToken
+    ? new Request(req_raw.url, {
+        method:  req_raw.method,
+        headers: new Headers({ ...Object.fromEntries(req_raw.headers), 'Authorization': `Bearer ${queryToken}` }),
+        body:    req_raw.body,
+      })
+    : req_raw
 
-// Aceptar token desde query param (para redirects del browser en action=connect)
-const queryToken = url.searchParams.get('token')
-if (queryToken) {
-  req = new Request(req.url, {
-    method:  req.method,
-    headers: new Headers({ ...Object.fromEntries(req.headers), 'Authorization': `Bearer ${queryToken}` }),
-    body:    req.body,
-  })
-}
-
-const supabase = createClient(
+  const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
   )
