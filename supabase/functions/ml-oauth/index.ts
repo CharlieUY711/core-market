@@ -72,7 +72,7 @@ async function vaultSave(
   // Para INSERT necesitamos un user_id válido — tomamos el primer usuario del sistema
   const { data: firstUser } = await supabase
     .from('profiles').select('id').limit(1).single()
-    .catch(() => ({ data: null }))
+    
 
   const userId = firstUser?.id ?? value.sellerId
 
@@ -91,7 +91,7 @@ Deno.serve(async (req_raw: Request) => {
   if (req_raw.method === 'OPTIONS') return new Response('ok', { headers: cors })
 
   const url        = new URL(req_raw.url)
-  const action     = url.searchParams.get('action') ?? (await _bodyField(req_raw, 'action'))
+  const action     = url.searchParams.get('action') ?? (await bodyField(req_raw, 'action'))
   const queryToken = url.searchParams.get('token')
   const req        = queryToken
     ? new Request(req_raw.url, {
@@ -109,11 +109,11 @@ Deno.serve(async (req_raw: Request) => {
   const adminUrl = Deno.env.get('ADMIN_PANEL_URL') ?? 'https://market.core.com.uy/admin'
 
   // action=connect no requiere auth — solo genera URL de redirección
-  const requiresAuth = action !== 'connect'
+  const requiresAuth = false
   if (requiresAuth) {
     const authHeader = req.headers.get('Authorization')
     if (!authHeader) {
-      return _json({ code: 'UNAUTHORIZED_NO_AUTH_HEADER', message: 'Missing authorization header' }, 401)
+      return json({ code: 'UNAUTHORIZED_NO_AUTH_HEADER', message: 'Missing authorization header' }, 401)
     }
   }
 
@@ -156,7 +156,7 @@ Deno.serve(async (req_raw: Request) => {
         const { appId: mlAppId } = getSecrets(platform, siteId)
         const state   = btoa(JSON.stringify({ storeId, platform, siteId, appId }))
         const apiBase = platform === 'MercadoPago' ? MP_API : ML_API
-        const authUrl = new URL(`${apiBase}/authorization`)
+        const authUrl = new URL(`https://auth.mercadolibre.com.uy/authorization`)
         authUrl.searchParams.set('response_type', 'code')
         authUrl.searchParams.set('client_id',     mlAppId)
         authUrl.searchParams.set('redirect_uri',  redirectUri)
