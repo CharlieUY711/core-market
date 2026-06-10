@@ -200,11 +200,12 @@ export default function AdminML() {
   useEffect(() => { load(); loadCreds(); }, []);
 
   // Conectar cuenta → redirige a ML/MP OAuth
-  const handleConnect = (platform: "MercadoLibre" | "MercadoPago", siteId = "MLU") => {
-    const params = new URLSearchParams({ action: "connect", platform, site_id: siteId });
-    window.location.href = `${FUNCTIONS_URL}/ml-oauth?${params}`;
-  };
-
+const handleConnect = async (platform: "MercadoLibre" | "MercadoPago", siteId = "MLU") => {
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token ?? SUPABASE_ANON_KEY;
+  const params = new URLSearchParams({ action: "connect", platform, site_id: siteId });
+  window.location.href = `${FUNCTIONS_URL}/ml-oauth?${params}&token=${token}`;
+};
   // Renovar token manualmente
   const handleRefresh = async (cred: Credential) => {
     const key = `${cred.platform}_${cred.siteId}`;
