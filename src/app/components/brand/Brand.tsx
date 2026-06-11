@@ -1,12 +1,12 @@
-export const BRAND = {
-  name:        "Charlie Market",
-  nameShort:   "Charlie",
-  secondHand:  "Second Hand",
+﻿export const BRAND = {
+  name:           "Market",
+  nameShort:      "Charlie",
+  secondHand:     "Second Hand",
   secondHandFull: "Second Hand by Charlie Market",
-  slogan:      "Tu marketplace de confianza",
-  primary:     "#FF7A00",
-  secondary:   "#0F3460",
-  accent:      "#1DC878",
+  slogan:         "Tu marketplace de confianza",
+  primary:        "#C9A84C",   // --color-accent de theme.css
+  secondary:      "#0D2B55",   // --color-bg-sidebar de theme.css
+  accent:         "#1DC878",
 };
 
 export function BrandLogo({ size = "md" }: { size?: "sm"|"md"|"lg" }) {

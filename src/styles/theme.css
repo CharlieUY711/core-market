@@ -17,6 +17,11 @@
   --color-text-light:    #FFFFFF;
   --color-text-dark:     #0D2B55;
   --color-border:        #C8D5E8;
+
+  /* Sidebar collapse */
+  --sidebar-width-expanded:  220px;
+  --sidebar-width-collapsed: 64px;
+  --sidebar-transition:      width 0.2s ease;
 }
 
 /* ── Sidebar ──────────────────────────────────── */
