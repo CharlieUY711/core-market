@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState, createContext, useContext } from "react";
+import { useEffect, useRef, useState, createContext, useContext } from "react";
 import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "../../../utils/supabase/client";
 import { useUserRole } from "../hooks/useUserRole";
@@ -21,7 +21,8 @@ const commonMenu = [
   { path: "/admin/orders",        label: "Mis órdenes"                    },
   { path: "/admin/publicaciones", label: "Mis publicaciones"              },
   { path: "/admin/biblioteca",    label: "Biblioteca"                     },
-  { path: "/admin/editor",        label: "Editor"                         },
+  { path: "/admin/editor",      label: "Editor"                         },
+  { path: "/admin/tool-editor", label: "Editor Pro"                     },
   { path: "/admin/import",        label: "Importar"                       },
   { path: "/admin/carga-masiva",  label: "Carga Masiva"                   },
   { path: "/admin/export",        label: "Exportar"                       },
@@ -140,7 +141,7 @@ function Sidebar({ user, isAdmin, location }: { user: any; isAdmin: boolean; loc
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate("/login");
+    navigate("/");
   };
 
   return (
@@ -289,7 +290,7 @@ export default function AdminLayout() {
     </div>
   );
 
-  if (!user) { navigate("/login"); return null; }
+  if (!user) { navigate("/"); return null; }
 
   return (
     <div style={{ display: "flex", minHeight: "100vh",
@@ -306,3 +307,4 @@ export default function AdminLayout() {
     </div>
   );
 }
+

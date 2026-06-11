@@ -1,4 +1,4 @@
-﻿import { createBrowserRouter, type RouteObject } from "react-router-dom";
+import { createBrowserRouter, type RouteObject } from "react-router-dom";
 
 import MarketPage from './public/MarketPage';
 import CarritoPage from "./public/CarritoPage";
@@ -26,6 +26,8 @@ import AdminEditor from "./admin/editor/EditorPage";
 import AdminApiVault from "./admin/pages/AdminApiVault";
 
 // 👉 NUEVA PÁGINA
+// 👉 EDITOR PRO
+import AdminToolEditor from "./admin/pages/AdminToolEditor";
 import AdminCargaMasiva from "./admin/pages/AdminCargaMasiva";
 
 export const TODAS_LAS_RUTAS: (RouteObject & { id: string })[] = [
@@ -58,6 +60,7 @@ export const TODAS_LAS_RUTAS: (RouteObject & { id: string })[] = [
       { id: "admin-profile",        path: "profile",       Component: AdminProfile },
       { id: "admin-catalog-articulos", path: "catalog/articulos", Component: AdminArticulos },
       { id: "admin-biblioteca",     path: "biblioteca",    Component: AdminBiblioteca },
+      { id: "admin-tool-editor", path: "tool-editor", Component: AdminToolEditor },
       { id: "admin-editor",         path: "editor",        Component: AdminEditor },
       { id: "admin-catalog",        path: "catalog",       Component: AdminCatalog },
       { id: "admin-ml",             path: "ml",            Component: AdminML },
@@ -67,3 +70,4 @@ export const TODAS_LAS_RUTAS: (RouteObject & { id: string })[] = [
 ];
 
 export const router = createBrowserRouter(TODAS_LAS_RUTAS);
+

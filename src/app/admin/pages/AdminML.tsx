@@ -351,55 +351,45 @@ export default function AdminML() {
           {/* ── MercadoLibre ── */}
           <div style={{ flex: 1, borderRight: `1px solid ${T.border}` }}>
             <div style={{
-              padding: "14px 20px",
+              padding: "12px 20px 0",
               background: mlTab ? T.bgMain : "transparent",
               borderBottom: mlTab ? `2px solid ${T.accent}` : "2px solid transparent",
             }}>
-              {/* Logo + label */}
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                <img src="/ML_logo.png" alt="MercadoLibre" style={{ width: 22, height: 22, objectFit: "contain" }} />
-                <span style={{ fontSize: 11, fontWeight: 700, color: mlTab ? T.accent : T.textMuted, textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                  MercadoLibre
-                </span>
-              </div>
-              {/* Cuenta ML sin contenedor */}
+              {/* Fila única: logo + nombre + status + botones */}
               {credsLoading ? (
-                <div style={{ fontSize: 11, color: T.textMuted, marginBottom: 10 }}>Cargando…</div>
+                <div style={{ fontSize: 11, color: T.textMuted, padding: "8px 0 10px" }}>Cargando…</div>
               ) : mlCreds.length === 0 ? (
-                <div style={{ marginBottom: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                  <img src="/ML_logo.png" alt="ML" style={{ width: 20, height: 20, objectFit: "contain" }} />
+                  <span style={{ fontSize: 11, fontWeight: 700, color: T.textMuted, textTransform: "uppercase", letterSpacing: "0.08em" }}>MercadoLibre</span>
                   <button onClick={() => handleConnect("MercadoLibre", "MLU")} style={{
-                    padding: "5px 12px", background: T.accent, color: "#fff",
+                    marginLeft: "auto", padding: "4px 10px", background: T.accent, color: "#fff",
                     border: "none", borderRadius: T.radiusSm, cursor: "pointer",
-                    fontWeight: 700, fontSize: 10, letterSpacing: "0.06em", textTransform: "uppercase",
-                  }}>+ Conectar cuenta</button>
+                    fontWeight: 700, fontSize: 10, textTransform: "uppercase",
+                  }}>+ Conectar</button>
                 </div>
-              ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 10 }}>
-                  {mlCreds.map(cred => {
-                    const diffMs   = new Date(cred.expiresAt).getTime() - Date.now();
-                    const diffHrs  = Math.max(0, Math.floor(diffMs / 3_600_000));
-                    const diffDays = Math.floor(diffHrs / 24);
-                    const expiryLabel = cred.isExpired ? "Vencido" : diffDays > 1 ? `Vence en ${diffDays}d` : diffHrs > 0 ? `Vence en ${diffHrs}h` : "Vence pronto";
-                    const statusColor = cred.isExpired ? T.danger : cred.expiringSoon ? T.warning : T.success;
-                    const isLoading   = actionLoading === `${cred.platform}_${cred.siteId}`;
-                    return (
-                      <div key={cred.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                        <div>
-                          <div style={{ fontSize: 12, fontWeight: 700, color: T.textDark }}>
-                            {cred.nickname || cred.siteId}
-                            {cred.isGlobal && <span style={{ marginLeft: 6, fontSize: 9, fontWeight: 700, color: T.primary, background: T.primaryLight, padding: "1px 5px", borderRadius: T.radiusPill }}>Global</span>}
-                          </div>
-                          <div style={{ fontSize: 10, color: statusColor, fontWeight: 600 }}>● {expiryLabel}</div>
-                        </div>
-                        <div style={{ display: "flex", gap: 4 }}>
-                          <button onClick={() => handleRefresh(cred)} disabled={isLoading} style={{ padding: "3px 8px", fontSize: 10, fontWeight: 600, background: "transparent", border: `1px solid ${T.border}`, borderRadius: T.radiusSm, cursor: "pointer", color: T.primary }}>↺</button>
-                          <button onClick={() => handleDisconnect(cred)} disabled={isLoading} style={{ padding: "3px 8px", fontSize: 10, fontWeight: 600, background: "transparent", border: `1px solid ${T.danger}`, borderRadius: T.radiusSm, cursor: "pointer", color: T.danger }}>✕</button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+              ) : mlCreds.map(cred => {
+                const diffMs   = new Date(cred.expiresAt).getTime() - Date.now();
+                const diffHrs  = Math.max(0, Math.floor(diffMs / 3_600_000));
+                const diffDays = Math.floor(diffHrs / 24);
+                const expiryLabel = cred.isExpired ? "Vencido" : diffDays > 1 ? `Vence en ${diffDays}d` : diffHrs > 0 ? `Vence en ${diffHrs}h` : "Vence pronto";
+                const statusColor = cred.isExpired ? T.danger : cred.expiringSoon ? T.warning : T.success;
+                const isLoading   = actionLoading === `${cred.platform}_${cred.siteId}`;
+                return (
+                  <div key={cred.id} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                    <img src="/ML_logo.png" alt="ML" style={{ width: 20, height: 20, objectFit: "contain", flexShrink: 0 }} />
+                    <span style={{ fontSize: 12, fontWeight: 700, color: T.textDark }}>
+                      {cred.nickname || cred.siteId}
+                    </span>
+                    {cred.isGlobal && <span style={{ fontSize: 9, fontWeight: 700, color: T.primary, background: T.primaryLight, padding: "1px 5px", borderRadius: T.radiusPill }}>Global</span>}
+                    <span style={{ fontSize: 10, color: statusColor, fontWeight: 600 }}>● {expiryLabel}</span>
+                    <div style={{ display: "flex", gap: 4, marginLeft: "auto" }}>
+                      <button onClick={() => handleRefresh(cred)} disabled={isLoading} style={{ padding: "3px 8px", fontSize: 10, fontWeight: 600, background: "transparent", border: `1px solid ${T.border}`, borderRadius: T.radiusSm, cursor: "pointer", color: T.primary }}>↺</button>
+                      <button onClick={() => handleDisconnect(cred)} disabled={isLoading} style={{ padding: "3px 8px", fontSize: 10, fontWeight: 600, background: "transparent", border: `1px solid ${T.danger}`, borderRadius: T.radiusSm, cursor: "pointer", color: T.danger }}>✕</button>
+                    </div>
+                  </div>
+                );
+              })}
               {/* Tabs ML */}
               <div style={{ display: "flex", gap: 0 }}>
                 {TABS.filter(t => t.section === "ml").map(t => (
@@ -414,55 +404,45 @@ export default function AdminML() {
           {/* ── MercadoPago ── */}
           <div style={{ flex: 1 }}>
             <div style={{
-              padding: "14px 20px",
+              padding: "12px 20px 0",
               background: mpTab ? T.bgMain : "transparent",
               borderBottom: mpTab ? `2px solid #009EE3` : "2px solid transparent",
             }}>
-              {/* Logo + label */}
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                <img src="/MP_logo.png" alt="MercadoPago" style={{ width: 22, height: 22, objectFit: "contain" }} />
-                <span style={{ fontSize: 11, fontWeight: 700, color: mpTab ? "#009EE3" : T.textMuted, textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                  MercadoPago
-                </span>
-              </div>
-              {/* Cuenta MP sin contenedor */}
+              {/* Fila única: logo + nombre + status + botones */}
               {credsLoading ? (
-                <div style={{ fontSize: 11, color: T.textMuted, marginBottom: 10 }}>Cargando…</div>
+                <div style={{ fontSize: 11, color: T.textMuted, padding: "8px 0 10px" }}>Cargando…</div>
               ) : mpCreds.length === 0 ? (
-                <div style={{ marginBottom: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                  <img src="/MP_logo.png" alt="MP" style={{ width: 20, height: 20, objectFit: "contain" }} />
+                  <span style={{ fontSize: 11, fontWeight: 700, color: T.textMuted, textTransform: "uppercase", letterSpacing: "0.08em" }}>MercadoPago</span>
                   <button onClick={() => handleConnect("MercadoPago", "MLU")} style={{
-                    padding: "5px 12px", background: "#009EE3", color: "#fff",
+                    marginLeft: "auto", padding: "4px 10px", background: "#009EE3", color: "#fff",
                     border: "none", borderRadius: T.radiusSm, cursor: "pointer",
-                    fontWeight: 700, fontSize: 10, letterSpacing: "0.06em", textTransform: "uppercase",
-                  }}>+ Conectar cuenta</button>
+                    fontWeight: 700, fontSize: 10, textTransform: "uppercase",
+                  }}>+ Conectar</button>
                 </div>
-              ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 10 }}>
-                  {mpCreds.map(cred => {
-                    const diffMs   = new Date(cred.expiresAt).getTime() - Date.now();
-                    const diffHrs  = Math.max(0, Math.floor(diffMs / 3_600_000));
-                    const diffDays = Math.floor(diffHrs / 24);
-                    const expiryLabel = cred.isExpired ? "Vencido" : diffDays > 1 ? `Vence en ${diffDays}d` : diffHrs > 0 ? `Vence en ${diffHrs}h` : "Vence pronto";
-                    const statusColor = cred.isExpired ? T.danger : cred.expiringSoon ? T.warning : T.success;
-                    const isLoading   = actionLoading === `${cred.platform}_${cred.siteId}`;
-                    return (
-                      <div key={cred.id} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                        <div>
-                          <div style={{ fontSize: 12, fontWeight: 700, color: T.textDark }}>
-                            {cred.nickname || cred.siteId}
-                            {cred.isGlobal && <span style={{ marginLeft: 6, fontSize: 9, fontWeight: 700, color: "#009EE3", background: "rgba(0,158,227,.1)", padding: "1px 5px", borderRadius: T.radiusPill }}>Global</span>}
-                          </div>
-                          <div style={{ fontSize: 10, color: statusColor, fontWeight: 600 }}>● {expiryLabel}</div>
-                        </div>
-                        <div style={{ display: "flex", gap: 4 }}>
-                          <button onClick={() => handleRefresh(cred)} disabled={isLoading} style={{ padding: "3px 8px", fontSize: 10, fontWeight: 600, background: "transparent", border: `1px solid ${T.border}`, borderRadius: T.radiusSm, cursor: "pointer", color: "#009EE3" }}>↺</button>
-                          <button onClick={() => handleDisconnect(cred)} disabled={isLoading} style={{ padding: "3px 8px", fontSize: 10, fontWeight: 600, background: "transparent", border: `1px solid ${T.danger}`, borderRadius: T.radiusSm, cursor: "pointer", color: T.danger }}>✕</button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
+              ) : mpCreds.map(cred => {
+                const diffMs   = new Date(cred.expiresAt).getTime() - Date.now();
+                const diffHrs  = Math.max(0, Math.floor(diffMs / 3_600_000));
+                const diffDays = Math.floor(diffHrs / 24);
+                const expiryLabel = cred.isExpired ? "Vencido" : diffDays > 1 ? `Vence en ${diffDays}d` : diffHrs > 0 ? `Vence en ${diffHrs}h` : "Vence pronto";
+                const statusColor = cred.isExpired ? T.danger : cred.expiringSoon ? T.warning : T.success;
+                const isLoading   = actionLoading === `${cred.platform}_${cred.siteId}`;
+                return (
+                  <div key={cred.id} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                    <img src="/MP_logo.png" alt="MP" style={{ width: 20, height: 20, objectFit: "contain", flexShrink: 0 }} />
+                    <span style={{ fontSize: 12, fontWeight: 700, color: T.textDark }}>
+                      {cred.nickname || cred.siteId}
+                    </span>
+                    {cred.isGlobal && <span style={{ fontSize: 9, fontWeight: 700, color: "#009EE3", background: "rgba(0,158,227,.1)", padding: "1px 5px", borderRadius: T.radiusPill }}>Global</span>}
+                    <span style={{ fontSize: 10, color: statusColor, fontWeight: 600 }}>● {expiryLabel}</span>
+                    <div style={{ display: "flex", gap: 4, marginLeft: "auto" }}>
+                      <button onClick={() => handleRefresh(cred)} disabled={isLoading} style={{ padding: "3px 8px", fontSize: 10, fontWeight: 600, background: "transparent", border: `1px solid ${T.border}`, borderRadius: T.radiusSm, cursor: "pointer", color: "#009EE3" }}>↺</button>
+                      <button onClick={() => handleDisconnect(cred)} disabled={isLoading} style={{ padding: "3px 8px", fontSize: 10, fontWeight: 600, background: "transparent", border: `1px solid ${T.danger}`, borderRadius: T.radiusSm, cursor: "pointer", color: T.danger }}>✕</button>
+                    </div>
+                  </div>
+                );
+              })}
               {/* Tabs MP */}
               <div style={{ display: "flex", gap: 0 }}>
                 {TABS.filter(t => t.section === "mp").map(t => (
