@@ -50,8 +50,7 @@ export async function importCatalogFromCsv(
         rowCount: rows.length,
         columns,
         parseWarnings: errors.length ? errors.slice(0, 10) : undefined,
-        preview: rows.slice(0, PREVIEW_ROWS),
-        previewTruncated: rows.length > PREVIEW_ROWS,
+        rows, // dataset completo: el componente decide cuánto mostrar
       },
     };
   } catch (err) {
@@ -154,8 +153,7 @@ export async function importCatalogFromUrl(
           contentType,
           rowCount: rows.length,
           columns: parsed.meta?.fields ?? [],
-          preview: rows.slice(0, PREVIEW_ROWS),
-          previewTruncated: rows.length > PREVIEW_ROWS,
+          rows,
         },
       };
     }
