@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ToolEditor — Design System
  * Repositorio: CharlieUY711/tool-editor
  * Path local:  C:\Core\tools\tool-editor\src\design\
@@ -277,43 +277,44 @@ export const DIMENSIONS = {
 
 export const S = {
   root:          { display:"flex", flexDirection:"column", height:"100%",
-                   background:"#f0efea", color:"#222",
-                   fontFamily:"'SF Mono','Fira Code',monospace",
-                   fontSize:12, overflow:"hidden" },
+                   background:"#F2F5FA", color:"#0D2B55",
+                   fontFamily:"Calibri, 'Segoe UI', system-ui, sans-serif",
+                   fontSize:13, overflow:"hidden" },
 
-  topbar:        { height:46, background:"#fff",
-                   borderBottom:"1px solid #e0ddd5",
+  topbar:        { height:44, background:"#0D2B55",
+                   borderBottom:"1px solid #081C38",
                    display:"flex", alignItems:"center",
                    gap:4, padding:"0 8px", flexShrink:0,
-                   boxShadow:"0 1px 0 rgba(0,0,0,.04)" },
+                   boxShadow:"0 2px 8px rgba(13,43,85,.14)" },
 
   logo:          { fontSize:13, fontWeight:700, letterSpacing:2,
-                   color:"#111", padding:"0 14px",
-                   borderRight:"1px solid #e0ddd5" },
+                   color:"#fff", padding:"0 14px",
+                   borderRight:"1px solid rgba(255,255,255,.12)" },
 
-  logoAccent:    { color:"#00d4aa" },    // span dentro del logo
+  logoAccent:    { color:"#C9A84C" },    // span dentro del logo
 
   tbGroup:       { display:"flex", alignItems:"center", gap:2,
-                   padding:"0 8px", borderRight:"1px solid #e0ddd5" },
+                   padding:"0 8px", borderRight:"1px solid rgba(255,255,255,.12)" },
 
-  tbBtn:         { background:"none", border:"none", color:"#666",
+  tbBtn:         { background:"none", border:"none", color:"rgba(255,255,255,.7)",
                    padding:"4px 9px", borderRadius:4,
                    cursor:"pointer", fontSize:11, fontFamily:"inherit" },
 
-  tbBtnAccent:   { background:"#00d4aa", color:"#fff" },
+  tbBtnAccent:   { background:"#C9A84C", color:"#fff" },
   tbBtnDanger:   { color:"#dc2626" },
   tbBtnDim:      { opacity: 0.35 },
 
-  btnPrimary:    { background:"#111", color:"#fff", border:"none",
+  btnPrimary:    { background:"#1A4F9C", color:"#fff", border:"none",
                    borderRadius:4, padding:"5px 12px",
-                   cursor:"pointer", fontSize:11, fontFamily:"inherit" },
+                   cursor:"pointer", fontSize:11, fontFamily:"inherit",
+                   fontWeight:600, letterSpacing:"0.05em" },
 
-  btnAccent:     { background:"#00d4aa", marginLeft:4 },
+  btnAccent:     { background:"#C9A84C", marginLeft:4 },
 
   main:          { display:"flex", flex:1, overflow:"hidden" },
 
-  toolsPanel:    { width:69, background:"#fff",
-                   borderRight:"1px solid #e0ddd5",
+  toolsPanel:    { width:56, background:"#fff",
+                   borderRight:"1px solid #C8D5E8",
                    display:"flex", flexDirection:"column",
                    alignItems:"center", padding:"8px 0",
                    gap:2, flexShrink:0 },
@@ -322,7 +323,7 @@ export const S = {
                    color:"#aaa", borderRadius:5, cursor:"pointer",
                    fontSize:16, transition:"all .15s" },
 
-  toolActive:    { background:"#111", color:"#fff" },
+  toolActive:    { background:"#1A4F9C", color:"#fff" },
 
   canvasWrap:    { flex:1, background:"#e8e6e0",
                    display:"flex", alignItems:"center",
@@ -354,21 +355,21 @@ export const S = {
   cropThirdV:    { position:"absolute", left:0, right:0,
                    borderTop:"1px solid rgba(255,255,255,.25)" },
 
-  rightPanel:    { width:320, background:"#fff",
-                   borderLeft:"1px solid #e0ddd5",
+  rightPanel:    { width:280, background:"#fff",
+                   borderLeft:"1px solid #C8D5E8",
                    display:"flex", flexDirection:"column",
                    flexShrink:0, overflow:"hidden" },
 
-  panelTabs:     { display:"flex", borderBottom:"1px solid #e0ddd5",
-                   flexShrink:0 },
+  panelTabs:     { display:"flex", borderBottom:"1px solid #C8D5E8",
+                   background:"#F2F5FA", flexShrink:0 },
 
-  ptab:          { flex:1, background:"none", border:"none", color:"#bbb",
-                   padding:"8px 2px", cursor:"pointer", fontSize:9,
-                   letterSpacing:.5, textTransform:"uppercase",
+  ptab:          { flex:1, background:"none", border:"none", color:"#7A7A7A",
+                   padding:"9px 2px", cursor:"pointer", fontSize:10,
+                   fontWeight:600, letterSpacing:.5, textTransform:"uppercase",
                    borderBottom:"2px solid transparent",
                    transition:"all .15s" },
 
-  ptabActive:    { color:"#00d4aa", borderBottomColor:"#00d4aa" },
+  ptabActive:    { color:"#1A4F9C", borderBottomColor:"#1A4F9C", background:"#fff" },
 
   panelScroll:   { padding:"10px 10px 20px", overflowY:"auto", flex:1 },
 
@@ -386,12 +387,13 @@ export const S = {
                    background:"repeating-conic-gradient(#ddd 0% 25%,#f5f5f5 0% 50%) 0 0/12px 12px" },
 
   // ── Botones de acción ────────────────────────────────────
-  applyBtn:      { width:"100%", background:"#111", color:"#fff",
+  applyBtn:      { width:"100%", background:"#1A4F9C", color:"#fff",
                    border:"none", borderRadius:4, padding:7,
-                   cursor:"pointer", fontSize:11, fontFamily:"inherit" },
+                   cursor:"pointer", fontSize:11, fontFamily:"inherit",
+                   fontWeight:600 },
 
-  applyBtnGhost: { background:"#f5f5f3", color:"#888",
-                   border:"1px solid #e0ddd5" },
+  applyBtnGhost: { background:"transparent", color:"#7A7A7A",
+                   border:"1px solid #C8D5E8" },
 
   applyBtnAI:    { background:"#7c3aed" },
 
@@ -408,7 +410,7 @@ export const S = {
                    color:"#888", borderRadius:3, padding:5,
                    cursor:"pointer", fontSize:10, textAlign:"center" },
 
-  outBtnActive:  { background:"#111", borderColor:"#111", color:"#fff" },
+  outBtnActive:  { background:"#1A4F9C", borderColor:"#1A4F9C", color:"#fff" },
 
   // ── Cards de info ────────────────────────────────────────
   sizeCard:      { fontSize:10, color:"#888", background:"#f5f5f3",
@@ -426,8 +428,8 @@ export const S = {
                    fontSize:10, fontFamily:"inherit" },
 
   // ── Status bar ──────────────────────────────────────────
-  statusbar:     { height:36, background:"#fff",
-                   borderTop:"1px solid #e0ddd5",
+  statusbar:     { height:32, background:"#F2F5FA",
+                   borderTop:"1px solid #C8D5E8",
                    display:"flex", alignItems:"center",
                    padding:"0 14px", gap:16, flexShrink:0 },
 

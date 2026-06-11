@@ -1,20 +1,13 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// extract-catalog — convierte UN chunk de texto (de un PDF) en filas de producto
-// usando Claude. El cliente orquesta el troceado y llama una vez por chunk, así
-// cada invocación es corta y no choca con el límite de tiempo de Edge Functions.
-//
-// Deploy:  supabase functions deploy extract-catalog
-// Secrets: supabase secrets set ANTHROPIC_API_KEY="sk-ant-..."
-//          (opcional) supabase secrets set EXTRACT_MODEL="claude-sonnet-4-6"
-// ─────────────────────────────────────────────────────────────────────────────
+// extract-catalog — texto (chunk de PDF) → filas de producto, con Groq (gratis).
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const DEFAULT_MODEL = "claude-sonnet-4-6";
+const DEFAULT_MODEL = "llama-3.3-70b-versatile";
+const VAULT_PLATFORM = "%groq%";
 
 const DEFAULT_FIELDS = [
   "nombre", "descripcion", "marca", "codigo", "numero_parte",
@@ -26,8 +19,8 @@ function buildSystem(fields: string[]): string {
   return [
     "Sos un extractor de catálogos de productos. Recibís texto crudo extraído de un PDF",
     "(puede traer ruido: encabezados, horarios de tienda, texto de marketing).",
-    "Devolvé EXCLUSIVAMENTE un array JSON válido, sin texto antes ni después, sin ```.",
-    "Cada elemento es un producto, con EXACTAMENTE estas claves:",
+    "Respondé SOLO con un objeto JSON con la forma: {\"products\": [ ... ]}.",
+    "Cada producto del array tiene EXACTAMENTE estas claves:",
     JSON.stringify(fields) + ".",
     "Reglas:",
     "- Si un dato no aparece en el texto, poné null. NUNCA lo inventes.",
@@ -35,83 +28,94 @@ function buildSystem(fields: string[]): string {
     "- Ignorá todo lo que no sea un producto (promos genéricas, direcciones, horarios).",
     "- 'codigo' es el código/SKU del proveedor; 'numero_parte' es el MPN del fabricante;",
     "  'ean'/'gtin' es el código de barras; 'modelo' es el modelo comercial.",
-    "- Si no hay productos en este fragmento, devolvé [].",
+    "- Si no hay productos en este fragmento, devolvé {\"products\": []}.",
   ].join("\n");
 }
 
-function parseJsonArray(text: string): any[] {
+function extractRows(text: string): any[] {
   let t = text.trim().replace(/^```(?:json)?/i, "").replace(/```$/i, "").trim();
-  // Recorta a los límites del array por si el modelo agregó algo.
-  const start = t.indexOf("[");
-  const end = t.lastIndexOf("]");
-  if (start !== -1 && end !== -1 && end > start) t = t.slice(start, end + 1);
   try {
     const parsed = JSON.parse(t);
-    return Array.isArray(parsed) ? parsed : [];
+    if (Array.isArray(parsed)) return parsed;
+    if (Array.isArray(parsed?.products)) return parsed.products;
+    if (Array.isArray(parsed?.items)) return parsed.items;
+    return [];
   } catch {
+    const s = t.indexOf("[");
+    const e = t.lastIndexOf("]");
+    if (s !== -1 && e > s) {
+      try { const a = JSON.parse(t.slice(s, e + 1)); return Array.isArray(a) ? a : []; } catch { /* noop */ }
+    }
     return [];
   }
 }
 
+async function getKeyFromVault(): Promise<string | null> {
+  try {
+    const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
+    const { data, error } = await admin
+      .from("api_vault").select("value")
+      .ilike("platform", VAULT_PLATFORM).eq("type", "api_key")
+      .order("updated_at", { ascending: false }).limit(1).maybeSingle();
+    if (error || !data?.value) return null;
+    return data.value as string;
+  } catch { return null; }
+}
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
-
   try {
-    // ── Auth ──
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) return json({ error: "No autorizado" }, 401);
-
+    if (!authHeader) return json({ error: "No autorizado" }, 200);
     const userClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_ANON_KEY")!,
+      Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!,
       { global: { headers: { Authorization: authHeader } } }
     );
     const { data: { user }, error: authError } = await userClient.auth.getUser();
-    if (authError || !user) return json({ error: "No autorizado" }, 401);
+    if (authError || !user) return json({ error: "No autorizado" }, 200);
 
-    // ── Input ──
     const { chunk, fields } = await req.json();
-    if (!chunk || typeof chunk !== "string") {
-      return json({ error: "Se requiere 'chunk' (texto)." }, 400);
-    }
-    const targetFields: string[] =
-      Array.isArray(fields) && fields.length ? fields : DEFAULT_FIELDS;
+    if (!chunk || typeof chunk !== "string") return json({ error: "Se requiere 'chunk' (texto)." }, 200);
+    const targetFields: string[] = Array.isArray(fields) && fields.length ? fields : DEFAULT_FIELDS;
 
-    const apiKey = Deno.env.get("ANTHROPIC_API_KEY");
-    if (!apiKey) {
-      return json({ error: "Falta ANTHROPIC_API_KEY en los secrets de la función." }, 500);
-    }
+    let apiKey = await getKeyFromVault();
+    if (!apiKey) apiKey = Deno.env.get("GROQ_API_KEY") ?? null;
+    if (!apiKey) return json({ error: "No encontré la API key de Groq (Vault 'Groq'/api_key o secret GROQ_API_KEY)." }, 200);
+
     const model = Deno.env.get("EXTRACT_MODEL") ?? DEFAULT_MODEL;
-
-    // ── Llamada a Claude ──
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model,
-        max_tokens: 4096,
-        system: buildSystem(targetFields),
-        messages: [{ role: "user", content: chunk }],
-      }),
+    const payload = JSON.stringify({
+      model, temperature: 0, response_format: { type: "json_object" },
+      messages: [
+        { role: "system", content: buildSystem(targetFields) },
+        { role: "user", content: chunk },
+      ],
     });
 
-    if (!resp.ok) {
+    let resp: Response | null = null;
+    for (let attempt = 0; attempt < 4; attempt++) {
+      resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+        method: "POST",
+        headers: { "content-type": "application/json", "authorization": `Bearer ${apiKey}` },
+        body: payload,
+      });
+      if (resp.status !== 429) break;
+      const ra = resp.headers.get("retry-after");
       const detail = await resp.text();
-      return json({ error: `Anthropic ${resp.status}: ${detail.slice(0, 300)}` }, 200);
+      const m = detail.match(/try again in ([\d.]+)\s*s/i);
+      let waitMs = ra ? parseFloat(ra) * 1000 : (m ? parseFloat(m[1]) * 1000 : 5000);
+      waitMs = Math.min(Math.ceil(waitMs) + 800, 30000);
+      if (attempt === 3) return json({ error: `Groq 429 (sin cupo tras reintentos): ${detail.slice(0, 200)}` }, 200);
+      await new Promise((r) => setTimeout(r, waitMs));
+    }
+
+    if (!resp || !resp.ok) {
+      const detail = resp ? await resp.text() : "sin respuesta";
+      return json({ error: `Groq ${resp?.status ?? "?"}: ${detail.slice(0, 300)}` }, 200);
     }
 
     const data = await resp.json();
-    const textOut = (data.content ?? [])
-      .filter((c: any) => c.type === "text")
-      .map((c: any) => c.text)
-      .join("");
-
-    const rows = parseJsonArray(textOut);
-
+    const textOut = data?.choices?.[0]?.message?.content ?? "";
+    const rows = extractRows(textOut);
     return json({ rows, count: rows.length }, 200);
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Error inesperado";
@@ -119,9 +123,6 @@ Deno.serve(async (req) => {
   }
 
   function json(obj: unknown, status: number) {
-    return new Response(JSON.stringify(obj), {
-      status,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return new Response(JSON.stringify(obj), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   }
 });

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * ToolEditor — Editor de imágenes profesional
  * Repositorio: CharlieUY711/tool-editor
  * Path local:  C:\Core\tools\tool-editor
@@ -138,25 +138,7 @@ function ToolEditorInner({ initialImage, config: userConfig, onExport, onReady, 
   } = state;
 
 
-  // ─── FIX #2: render siempre desde cleanImgRef, no desde imgEl modificado ──
-  const render = useCallback((adjOverride, filterOverride) => {
-    const canvas = canvasRef.current;
-    const base   = cleanImgRef.current;
-    if (!canvas || !base) return;
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.filter = "none";
-    ctx.drawImage(base, 0, 0);
-    const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    applyPixelAdjustments(data, adjOverride ?? adj);
-    ctx.putImageData(data, 0, 0);
-    // Filtro CSS visual (solo para preview — la exportación lo hornea aparte)
-    const fid = filterOverride ?? activeFilter;
-    const flt = FILTERS.find(f => f.id === fid);
-    canvas.style.filter = flt?.id !== "none" ? flt.css : "none";
-  }, [adj, activeFilter]);
 
-  useEffect(() => { render(); }, [render]);
 
   const fitToView = useCallback((cw, ch) => {
     const wrap = document.getElementById("ce-wrap");
@@ -206,55 +188,7 @@ function ToolEditorInner({ initialImage, config: userConfig, onExport, onReady, 
     loadSnap(h.list[h.idx]);
   };
 
-  // ─── Cargar imagen ────────────────────────────────────────────────────────
-  const loadImage = useCallback((file) => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      const src   = ev.target.result;
-      const image = new Image();
-      image.onload = () => {
-        const canvas = canvasRef.current;
-        canvas.style.filter = "none";
-        canvas.width  = image.width;
-        canvas.height = image.height;
-        canvas.getContext("2d").drawImage(image, 0, 0);
-        cleanImgRef.current = image;          // FIX #2: guardar base limpia
-        setImgEl(image);
-        setOriginalSrc(src);
-        setFileName(file.name);
-        setCanvasDims({ w:image.width, h:image.height });
-        setOutW(image.width); setOutH(image.height);
-        setAdj({ ...ADJ_DEFAULTS });
-        setActiveFilter("none");
-        fitToView(image.width, image.height);
-        // Resetear historia
-        histRef.current = { list:[], idx:-1 };
-        saveSnap(canvas);
-      };
-      image.src = src;
-    };
-    reader.readAsDataURL(file);
-  }, [fitToView, saveSnap]);
 
-  // ─── Bake + snapshot: congela el canvas actual como nueva base ────────────
-  const commitToBase = useCallback(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    // Hornear filtro CSS en píxeles
-    const flt = FILTERS.find(f => f.id === activeFilter);
-    if (flt && flt.id !== "none") bakeFilterToPixels(canvas, flt.css);
-    canvas.style.filter = "none";
-    // Nueva imagen base
-    const newBase = new Image();
-    newBase.onload = () => {
-      cleanImgRef.current = newBase;
-      setImgEl(newBase);
-      setActiveFilter("none");
-      setAdj({ ...ADJ_DEFAULTS });
-      saveSnap(canvas);
-    };
-    newBase.src = canvas.toDataURL();
-  }, [activeFilter, saveSnap]);
 
   // ─── IA Remove BG — delega a effectsEngine ───────────────────────────────
   const handleRemoveBG = async () => {
@@ -695,8 +629,6 @@ export default function ToolEditor(props) {
     </ToolEditorErrorBoundary>
   );
 }
-
-
 
 
 
