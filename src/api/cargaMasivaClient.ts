@@ -1,14 +1,14 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // CORE Market — Carga Masiva (cliente)
 //
-// Parseo 100% client-side. core-market es un SPA de Vite (sin serverless),
-// así que la importación se resuelve en el navegador:
-//   • CSV  → papaparse
-//   • PDF  → pdfjs-dist (extracción de texto)
-//   • URL  → fetch best-effort (limitado por CORS del sitio destino)
+//   • CSV  → papaparse (client-side)
+//   • PDF  → pdfjs-dist extrae el texto (client-side) → opcional: estructurar con IA
+//   • URL  → Edge Function "import-proxy" (server-side, sin CORS)
+//   • IA   → Edge Function "extract-catalog" (Claude) trocea el texto en filas
 //
-// Las libs se cargan con import() dinámico para no engordar el bundle principal.
+// Las libs pesadas se cargan con import() dinámico.
 // ─────────────────────────────────────────────────────────────────────────────
+import { supabase } from "@/utils/supabase/client";
 
 export interface CargaMasivaResult {
   success: boolean;
@@ -16,20 +16,21 @@ export interface CargaMasivaResult {
   error?: string;
 }
 
-// Máximo de filas a devolver en el preview (el resto se cuenta pero no se vuelca).
-const PREVIEW_ROWS = 50;
-// Máximo de caracteres de texto de PDF a devolver en el preview.
 const PREVIEW_CHARS = 4000;
+
+// Campos destino que le pedimos al extractor LLM.
+const TARGET_KEYS = [
+  "nombre", "descripcion", "marca", "codigo", "numero_parte",
+  "ean", "modelo", "precio", "precio_original", "moneda",
+  "stock", "imagenes", "categoria",
+];
 
 // ── CSV ──────────────────────────────────────────────────────────────────────
 export async function importCatalogFromCsv(
   file: File
 ): Promise<CargaMasivaResult> {
   try {
-    // papaparse no trae tipos propios y @types/papaparse no está en el repo,
-    // por eso lo tipamos de forma laxa.
     const Papa = (await import("papaparse")).default as any;
-
     const text = await file.text();
     const parsed = Papa.parse(text, {
       header: true,
@@ -50,16 +51,13 @@ export async function importCatalogFromCsv(
         rowCount: rows.length,
         columns,
         parseWarnings: errors.length ? errors.slice(0, 10) : undefined,
-        rows, // dataset completo: el componente decide cuánto mostrar
+        rows,
       },
     };
   } catch (err) {
     return {
       success: false,
-      error:
-        err instanceof Error
-          ? `No se pudo procesar el CSV: ${err.message}`
-          : "No se pudo procesar el CSV.",
+      error: err instanceof Error ? `No se pudo procesar el CSV: ${err.message}` : "No se pudo procesar el CSV.",
     };
   }
 }
@@ -70,8 +68,6 @@ export async function importCatalogFromPdf(
 ): Promise<CargaMasivaResult> {
   try {
     const pdfjsLib = await import("pdfjs-dist");
-
-    // Worker resuelto por Vite (se empaqueta junto al build).
     pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
       "pdfjs-dist/build/pdf.worker.min.mjs",
       import.meta.url
@@ -85,11 +81,8 @@ export async function importCatalogFromPdf(
       const page = await pdf.getPage(i);
       const content = await page.getTextContent();
       fullText +=
-        content.items
-          .map((it: any) => ("str" in it ? it.str : ""))
-          .join(" ") + "\n";
+        content.items.map((it: any) => ("str" in it ? it.str : "")).join(" ") + "\n";
     }
-
     const cleaned = fullText.replace(/\s+/g, " ").trim();
 
     return {
@@ -102,40 +95,33 @@ export async function importCatalogFromPdf(
         textLength: cleaned.length,
         preview: cleaned.slice(0, PREVIEW_CHARS),
         previewTruncated: cleaned.length > PREVIEW_CHARS,
+        text: cleaned, // texto completo, para el extractor IA
       },
     };
   } catch (err) {
     return {
       success: false,
-      error:
-        err instanceof Error
-          ? `No se pudo procesar el PDF: ${err.message}`
-          : "No se pudo procesar el PDF.",
+      error: err instanceof Error ? `No se pudo procesar el PDF: ${err.message}` : "No se pudo procesar el PDF.",
     };
   }
 }
 
-// ── URL ──────────────────────────────────────────────────────────────────────
-// Best-effort: el fetch al sitio del proveedor depende de que ese sitio
-// habilite CORS. Si no lo hace, el navegador bloquea la respuesta y se informa
-// con un error claro (ese caso requeriría un proxy/backend — opción B).
+// ── URL (vía Edge Function proxy) ────────────────────────────────────────────
 export async function importCatalogFromUrl(
   url: string
 ): Promise<CargaMasivaResult> {
   try {
-    const res = await fetch(url, { method: "GET" });
-
-    if (!res.ok) {
-      return {
-        success: false,
-        error: `El servidor respondió ${res.status} ${res.statusText}.`,
-      };
+    const { data, error } = await supabase.functions.invoke("import-proxy", {
+      body: { url },
+    });
+    if (error) return { success: false, error: `Proxy: ${error.message}` };
+    if (!data?.ok) {
+      return { success: false, error: data?.error ?? "No se pudo acceder a la URL." };
     }
 
-    const contentType = res.headers.get("content-type") ?? "";
-    const body = await res.text();
+    const contentType: string = data.contentType ?? "";
+    const body: string = data.body ?? "";
 
-    // Si es CSV, lo parseamos con el mismo pipeline.
     if (contentType.includes("csv") || url.toLowerCase().endsWith(".csv")) {
       const Papa = (await import("papaparse")).default as any;
       const parsed = Papa.parse(body, {
@@ -158,7 +144,6 @@ export async function importCatalogFromUrl(
       };
     }
 
-    // Cualquier otro tipo: devolvemos metadatos + snippet para inspección.
     return {
       success: true,
       data: {
@@ -169,18 +154,107 @@ export async function importCatalogFromUrl(
         length: body.length,
         preview: body.slice(0, PREVIEW_CHARS),
         previewTruncated: body.length > PREVIEW_CHARS,
+        text: body, // texto completo, por si se quiere estructurar con IA
       },
     };
   } catch (err) {
-    const isCors =
-      err instanceof TypeError && /fetch|load failed|network/i.test(err.message);
     return {
       success: false,
-      error: isCors
-        ? "No se pudo acceder a la URL (probablemente bloqueada por CORS del sitio destino). Importar por URL desde un dominio externo suele requerir un proxy/backend."
-        : err instanceof Error
-        ? `No se pudo importar desde la URL: ${err.message}`
-        : "No se pudo importar desde la URL.",
+      error: err instanceof Error ? `No se pudo importar desde la URL: ${err.message}` : "No se pudo importar desde la URL.",
+    };
+  }
+}
+
+// ── Extracción con IA (texto → filas estructuradas) ──────────────────────────
+const CHUNK_SIZE = 8000;
+const MAX_CHUNKS = 30;
+
+function chunkText(text: string): string[] {
+  // Corta en límites "Modelo" para no partir productos; agrupa hasta CHUNK_SIZE.
+  const parts = text.split(/(?=\bModelo\b)/g);
+  const chunks: string[] = [];
+  let cur = "";
+  for (const p of parts) {
+    if ((cur + p).length > CHUNK_SIZE && cur) {
+      chunks.push(cur);
+      cur = p;
+    } else {
+      cur += p;
+    }
+  }
+  if (cur.trim()) chunks.push(cur);
+
+  // Fallback: un solo bloque gigante sin "Modelo" → corte fijo.
+  if (chunks.length === 1 && chunks[0].length > CHUNK_SIZE) {
+    const big = chunks[0];
+    chunks.length = 0;
+    for (let i = 0; i < big.length; i += CHUNK_SIZE) chunks.push(big.slice(i, i + CHUNK_SIZE));
+  }
+  return chunks.slice(0, MAX_CHUNKS);
+}
+
+export async function extractCatalogFromText(
+  text: string,
+  onProgress?: (done: number, total: number) => void
+): Promise<CargaMasivaResult> {
+  try {
+    if (!text || !text.trim()) {
+      return { success: false, error: "No hay texto para estructurar." };
+    }
+    const chunks = chunkText(text);
+    const all: Record<string, any>[] = [];
+
+    for (let i = 0; i < chunks.length; i++) {
+      const { data, error } = await supabase.functions.invoke("extract-catalog", {
+        body: { chunk: chunks[i], fields: TARGET_KEYS },
+      });
+      if (error) return { success: false, error: `Extracción: ${error.message}` };
+      if (data?.error) return { success: false, error: data.error };
+      if (Array.isArray(data?.rows)) all.push(...data.rows);
+      onProgress?.(i + 1, chunks.length);
+    }
+
+    // Dedupe por identificador disponible.
+    const seen = new Set<string>();
+    const deduped = all.filter((r) => {
+      const k = String(
+        r.codigo || r.ean || r.numero_parte || r.modelo || r.nombre || JSON.stringify(r)
+      ).trim().toLowerCase();
+      if (!k || seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+
+    // Columnas presentes (en el orden de TARGET_KEYS).
+    const present = new Set<string>();
+    deduped.forEach((r) => Object.keys(r).forEach((k) => present.add(k)));
+    const columns = TARGET_KEYS.filter((k) => present.has(k));
+
+    // Normaliza a Record<string,string> para la grilla (objetos/arrays → JSON).
+    const rows = deduped.map((r) => {
+      const o: Record<string, string> = {};
+      for (const c of columns) {
+        const v = r[c];
+        o[c] = v == null ? "" : typeof v === "object" ? JSON.stringify(v) : String(v);
+      }
+      return o;
+    });
+
+    return {
+      success: true,
+      data: {
+        source: "pdf-llm",
+        columns,
+        rows,
+        rowCount: rows.length,
+        chunks: chunks.length,
+        truncated: chunks.length >= MAX_CHUNKS,
+      },
+    };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? `No se pudo estructurar: ${err.message}` : "No se pudo estructurar el contenido.",
     };
   }
 }

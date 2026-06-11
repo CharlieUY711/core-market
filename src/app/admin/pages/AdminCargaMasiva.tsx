@@ -5,6 +5,7 @@ import {
   importCatalogFromUrl,
   importCatalogFromCsv,
   importCatalogFromPdf,
+  extractCatalogFromText,
   CargaMasivaResult,
 } from "@/api/cargaMasivaClient";
 
@@ -110,6 +111,9 @@ export default function AdminCargaMasiva() {
   const [mapping, setMapping] = useState<Record<string, string>>({});
   const [confirmed, setConfirmed] = useState(false);
 
+  const [extracting, setExtracting] = useState(false);
+  const [extractProgress, setExtractProgress] = useState<{ done: number; total: number }>({ done: 0, total: 0 });
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const currentMode = MODES.find((m) => m.id === activeMode)!;
 
@@ -119,6 +123,8 @@ export default function AdminCargaMasiva() {
     setTextResult(null);
     setMapping({});
     setConfirmed(false);
+    setExtracting(false);
+    setExtractProgress({ done: 0, total: 0 });
   }
 
   function handleModeChange(mode: ImportMode) {
@@ -177,6 +183,42 @@ export default function AdminCargaMasiva() {
       setError("Error inesperado al importar.");
     } finally {
       setLoading(false);
+    }
+  }
+
+  // Estructura el texto (PDF/URL) con IA → filas para la grilla.
+  async function handleExtract() {
+    const t = (textResult as any)?.text as string | undefined;
+    if (!t) return;
+    setExtracting(true);
+    setError(null);
+    setExtractProgress({ done: 0, total: 0 });
+    try {
+      const res = await extractCatalogFromText(t, (done, total) =>
+        setExtractProgress({ done, total })
+      );
+      if (!res.success) {
+        setError(res.error ?? "No se pudo estructurar.");
+        return;
+      }
+      const data = res.data as any;
+      if (data?.columns && Array.isArray(data.rows) && data.rows.length) {
+        const p: ParsedCsv = {
+          columns: data.columns,
+          rows: data.rows,
+          rowCount: data.rowCount ?? data.rows.length,
+          fileName: "Extraído con IA",
+        };
+        setParsed(p);
+        setMapping(autoMap(p.columns));
+        setTextResult(null);
+      } else {
+        setError("La IA no devolvió productos en este contenido. Revisá el texto o probá otro archivo.");
+      }
+    } catch {
+      setError("Error inesperado al estructurar.");
+    } finally {
+      setExtracting(false);
     }
   }
 
@@ -321,7 +363,27 @@ export default function AdminCargaMasiva() {
         {textResult !== null && (
           <div className="cm-result cm-result--ok" role="status">
             <div className="cm-result-badge"><IconCheck /><span>Contenido leído</span></div>
-            <pre className="cm-pre">{JSON.stringify(textResult, null, 2)}</pre>
+            <pre className="cm-pre">
+              {(textResult as any).preview ?? JSON.stringify(textResult, null, 2)}
+            </pre>
+            {(textResult as any).text && (
+              <button
+                className="cm-btn"
+                style={{ marginTop: "var(--space-4)" }}
+                onClick={handleExtract}
+                disabled={extracting}
+                aria-busy={extracting}
+              >
+                {extracting ? (
+                  <>
+                    <span className="cm-spinner" aria-hidden="true" />
+                    Estructurando…{extractProgress.total ? ` (${extractProgress.done}/${extractProgress.total})` : ""}
+                  </>
+                ) : (
+                  <><IconSparkles /> Estructurar con IA</>
+                )}
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -668,6 +730,14 @@ function IconAlert() {
       <circle cx="12" cy="12" r="10"/>
       <line x1="12" y1="8" x2="12" y2="12"/>
       <line x1="12" y1="16" x2="12.01" y2="16"/>
+    </svg>
+  );
+}
+function IconSparkles() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3l1.6 4.2L18 9l-4.4 1.8L12 15l-1.6-4.2L6 9l4.4-1.8z"/>
+      <path d="M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8z"/>
     </svg>
   );
 }
