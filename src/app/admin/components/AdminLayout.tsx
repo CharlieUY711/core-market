@@ -23,6 +23,7 @@ const commonMenu = [
   { path: "/admin/biblioteca",    label: "Biblioteca"                     },
   { path: "/admin/editor",        label: "Editor"                         },
   { path: "/admin/import",        label: "Importar"                       },
+  { path: "/admin/carga-masiva",  label: "Carga Masiva"                   },
   { path: "/admin/export",        label: "Exportar"                       },
   { path: "/admin/profile",       label: "Mi perfil"                      },
 ];

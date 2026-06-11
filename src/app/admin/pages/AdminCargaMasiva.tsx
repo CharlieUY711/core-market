@@ -196,14 +196,12 @@ export default function AdminCargaMasiva() {
         )}
       </div>
 
-      {/* ── Scoped styles with CORE Market design tokens ── */}
+      {/* ── Scoped styles — 100% sobre tokens CORE Market ── */}
       <style>{`
         .cm-root {
-          min-height: 100%;
-          background: var(--color-bg-main, #F2F5FA);
-          color: var(--color-text-dark, #0D2B55);
-          font-family: var(--font-base, Calibri, 'Segoe UI', system-ui, sans-serif);
-          padding: var(--space-6, 32px) var(--space-4, 16px);
+          font-family: var(--font-base);
+          color: var(--color-text-dark);
+          padding: var(--space-6) var(--space-5);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -213,27 +211,27 @@ export default function AdminCargaMasiva() {
         .cm-header {
           width: 100%;
           max-width: 640px;
-          margin-bottom: var(--space-5, 24px);
+          margin-bottom: var(--space-6);
         }
         .cm-header-eyebrow {
           display: inline-block;
-          font-size: 9px;
-          font-weight: var(--fw-black, 700);
+          font-size: 10px;
+          font-weight: var(--fw-bold);
           letter-spacing: 0.18em;
           text-transform: uppercase;
-          color: var(--brand-primary, #1A4F9C);
-          margin-bottom: var(--space-2, 8px);
+          color: var(--color-primary);
+          margin-bottom: var(--space-1);
         }
         .cm-header-title {
           font-size: 20px;
-          font-weight: var(--fw-black, 700);
+          font-weight: var(--fw-black);
           letter-spacing: -0.01em;
-          margin: 0 0 var(--space-1, 4px);
-          color: var(--color-text-dark, #0D2B55);
+          margin: 0 0 var(--space-1);
+          color: var(--color-text-dark);
         }
         .cm-header-sub {
-          font-size: 13px;
-          color: var(--gray-400, #7A7A7A);
+          font-size: 12px;
+          color: var(--gray-400);
           margin: 0;
         }
 
@@ -242,79 +240,78 @@ export default function AdminCargaMasiva() {
           width: 100%;
           max-width: 640px;
           background: #fff;
-          border: 1px solid var(--color-border, #C8D5E8);
-          border-radius: var(--radius-lg, 12px);
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-lg);
+          box-shadow: var(--shadow-card);
           overflow: hidden;
-          box-shadow: var(--shadow-card, 0 2px 8px rgba(13,43,85,.08));
         }
 
         /* ── Tabs ── */
         .cm-tabs {
           display: flex;
-          border-bottom: 1px solid var(--color-border, #C8D5E8);
-          background: var(--gray-50, #F2F5FA);
+          border-bottom: 1px solid var(--color-border);
         }
         .cm-tab {
           flex: 1;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: var(--space-1, 4px);
-          padding: var(--space-3, 12px) var(--space-2, 8px);
+          gap: var(--space-1);
+          padding: var(--space-3) var(--space-2);
           background: none;
           border: none;
-          color: var(--gray-400, #7A7A7A);
-          font-size: 10px;
-          font-weight: var(--fw-bold, 600);
-          letter-spacing: 0.1em;
+          color: var(--gray-400);
+          font-family: var(--font-base);
+          font-size: 11px;
+          font-weight: var(--fw-bold);
+          letter-spacing: 0.08em;
           text-transform: uppercase;
           cursor: pointer;
-          transition: color 0.15s, background 0.15s;
-          border-bottom: 2px solid transparent;
+          transition: color 0.2s ease-in-out, background 0.2s ease-in-out;
         }
-        .cm-tab svg { width: 14px; height: 14px; }
+        .cm-tab svg { width: 15px; height: 15px; }
         .cm-tab:hover {
-          color: var(--brand-primary, #1A4F9C);
-          background: var(--brand-primary-light, rgba(26,79,156,.1));
+          color: var(--color-primary);
+          background: var(--gray-50);
         }
         .cm-tab--active {
-          color: var(--color-accent, #C9A84C);
-          background: var(--brand-accent-light, rgba(201,168,76,.1));
-          border-bottom-color: var(--color-accent, #C9A84C);
+          color: var(--brand-accent-dark);
+          background: var(--brand-accent-light);
+          box-shadow: inset 0 -2px 0 var(--brand-accent);
         }
 
         /* ── Body ── */
         .cm-body {
-          padding: var(--space-5, 24px) var(--space-4, 16px);
+          padding: var(--space-5);
           display: flex;
           flex-direction: column;
-          gap: var(--space-4, 16px);
+          gap: var(--space-4);
         }
 
         /* ── Field ── */
-        .cm-field { display: flex; flex-direction: column; gap: var(--space-1, 4px); }
+        .cm-field { display: flex; flex-direction: column; gap: var(--space-2); }
         .cm-label {
-          font-size: 9px;
-          font-weight: var(--fw-bold, 600);
-          letter-spacing: 0.1em;
+          font-size: 10px;
+          font-weight: var(--fw-bold);
+          letter-spacing: 0.06em;
           text-transform: uppercase;
-          color: var(--gray-400, #7A7A7A);
+          color: var(--gray-400);
         }
         .cm-input {
           background: #fff;
-          border: 1px solid var(--color-border, #C8D5E8);
-          border-radius: var(--radius-sm, 4px);
-          padding: var(--space-2, 8px) var(--space-3, 12px);
-          color: var(--color-text-dark, #0D2B55);
-          font-size: 13px;
-          font-family: var(--font-base, Calibri, 'Segoe UI', system-ui, sans-serif);
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-sm);
+          padding: var(--space-2) var(--space-3);
+          color: var(--color-text-dark);
+          font-family: var(--font-base);
+          font-size: 14px;
           outline: none;
-          transition: border-color 0.15s, box-shadow 0.15s;
+          transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
-        .cm-input::placeholder { color: var(--gray-200, #C8D5E8); }
+        .cm-input::placeholder { color: var(--gray-400); }
         .cm-input:focus {
-          border-color: var(--brand-primary, #1A4F9C);
-          box-shadow: 0 0 0 3px var(--brand-primary-light, rgba(26,79,156,.1));
+          border-color: var(--color-primary);
+          box-shadow: 0 0 0 3px var(--brand-primary-light);
         }
 
         /* ── Dropzone ── */
@@ -323,63 +320,59 @@ export default function AdminCargaMasiva() {
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: var(--space-1, 4px);
-          border: 1.5px dashed var(--color-border, #C8D5E8);
-          border-radius: var(--radius-md, 8px);
-          padding: var(--space-5, 24px) var(--space-4, 16px);
+          gap: var(--space-1);
+          border: 1.5px dashed var(--color-border);
+          border-radius: var(--radius-md);
+          padding: var(--space-6) var(--space-4);
           cursor: pointer;
-          transition: border-color 0.15s, background 0.15s;
+          transition: border-color 0.2s ease-in-out, background 0.2s ease-in-out;
           text-align: center;
-          background: var(--gray-50, #F2F5FA);
         }
         .cm-dropzone:hover {
-          border-color: var(--brand-primary, #1A4F9C);
-          background: var(--brand-primary-light, rgba(26,79,156,.1));
+          border-color: var(--color-primary);
+          background: var(--brand-primary-light);
         }
-        .cm-dropzone svg { width: 24px; height: 24px; color: var(--gray-200, #C8D5E8); }
-        .cm-dropzone:hover svg { color: var(--brand-primary, #1A4F9C); }
+        .cm-dropzone svg { width: 28px; height: 28px; color: var(--gray-400); }
+        .cm-dropzone:hover svg { color: var(--color-primary); }
         .cm-dropzone-name {
-          font-size: 13px;
-          font-weight: var(--fw-bold, 600);
-          color: var(--color-text-dark, #0D2B55);
+          font-size: 14px;
+          font-weight: var(--fw-bold);
+          color: var(--gray-600);
           word-break: break-all;
         }
-        .cm-dropzone-hint { font-size: 12px; color: var(--gray-400, #7A7A7A); }
+        .cm-dropzone-hint { font-size: 12px; color: var(--gray-400); }
 
         /* ── Button ── */
         .cm-btn {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: var(--space-1, 4px);
-          padding: var(--space-2, 8px) var(--space-4, 16px);
+          gap: var(--space-2);
+          padding: var(--space-2) var(--space-5);
           border: none;
-          border-radius: var(--radius-sm, 4px);
-          background: var(--brand-primary, #1A4F9C);
-          color: #fff;
+          border-radius: var(--radius-sm);
+          background: var(--color-primary);
+          color: var(--color-text-light);
+          font-family: var(--font-base);
           font-size: 11px;
-          font-weight: var(--fw-bold, 600);
-          font-family: var(--font-base, Calibri, 'Segoe UI', system-ui, sans-serif);
+          font-weight: var(--fw-bold);
           letter-spacing: 0.1em;
           text-transform: uppercase;
           cursor: pointer;
-          transition: background 0.15s, transform 0.1s, opacity 0.15s;
+          transition: background 0.2s ease-in-out, transform 0.1s, opacity 0.2s;
         }
-        .cm-btn svg { width: 14px; height: 14px; }
-        .cm-btn:hover:not(:disabled) {
-          background: var(--color-primary-hover, #0D2B55);
-          transform: translateY(-1px);
-        }
+        .cm-btn svg { width: 16px; height: 16px; }
+        .cm-btn:hover:not(:disabled) { background: var(--color-primary-hover); transform: translateY(-1px); }
         .cm-btn:active:not(:disabled) { transform: translateY(0); }
         .cm-btn:disabled { opacity: 0.55; cursor: not-allowed; }
 
         /* ── Spinner ── */
         .cm-spinner {
           display: inline-block;
-          width: 12px;
-          height: 12px;
-          border: 2px solid rgba(255,255,255,0.3);
-          border-top-color: #fff;
+          width: 14px;
+          height: 14px;
+          border: 2px solid color-mix(in srgb, var(--color-text-light) 35%, transparent);
+          border-top-color: var(--color-text-light);
           border-radius: 50%;
           animation: cm-spin 0.7s linear infinite;
         }
@@ -387,51 +380,49 @@ export default function AdminCargaMasiva() {
 
         /* ── Result ── */
         .cm-result {
-          border-top: 1px solid var(--color-border, #C8D5E8);
-          padding: var(--space-4, 16px) var(--space-4, 16px) var(--space-5, 24px);
+          border-top: 1px solid var(--color-border);
+          padding: var(--space-4) var(--space-5) var(--space-5);
         }
         .cm-result--ok {
-          --cm-accent: var(--color-success, #1D9E75);
-          --cm-bg: rgba(29,158,117,.06);
-          --cm-border: rgba(29,158,117,.2);
+          --cm-accent: var(--color-success);
+          --cm-bg: color-mix(in srgb, var(--color-success) 8%, transparent);
         }
         .cm-result--err {
-          --cm-accent: var(--color-danger, #C0392B);
-          --cm-bg: rgba(192,57,43,.06);
-          --cm-border: rgba(192,57,43,.2);
+          --cm-accent: var(--color-danger);
+          --cm-bg: color-mix(in srgb, var(--color-danger) 8%, transparent);
         }
         .cm-result-badge {
           display: flex;
           align-items: center;
-          gap: var(--space-1, 4px);
-          font-size: 9px;
-          font-weight: var(--fw-black, 700);
-          letter-spacing: 0.1em;
+          gap: var(--space-1);
+          font-size: 10px;
+          font-weight: var(--fw-black);
+          letter-spacing: 0.06em;
           text-transform: uppercase;
           color: var(--cm-accent);
-          margin-bottom: var(--space-2, 8px);
+          margin-bottom: var(--space-2);
         }
-        .cm-result-badge svg { width: 14px; height: 14px; }
+        .cm-result-badge svg { width: 15px; height: 15px; }
         .cm-pre {
           background: var(--cm-bg);
-          border: 1px solid var(--cm-border);
-          border-radius: var(--radius-md, 8px);
-          padding: var(--space-3, 12px);
-          font-size: 11px;
-          color: var(--gray-600, #4A4A4A);
+          border: 1px solid color-mix(in srgb, var(--cm-accent) 20%, transparent);
+          border-radius: var(--radius-sm);
+          padding: var(--space-4);
+          font-size: 12px;
+          color: var(--gray-600);
           overflow: auto;
           max-height: 280px;
           white-space: pre-wrap;
           word-break: break-all;
           margin: 0;
-          font-family: var(--font-mono, 'Courier New', monospace);
+          font-family: var(--font-mono);
         }
       `}</style>
     </div>
   );
 }
 
-/* ── Inline SVG icons ── */
+/* ── Inline SVG icons (heredan currentColor) ── */
 function IconLink() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
