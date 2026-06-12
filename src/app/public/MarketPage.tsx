@@ -1,4 +1,4 @@
-// ═══════════════════════════════════════════════════════════
+﻿// ═══════════════════════════════════════════════════════════
 // CORE Market — MarketPage.tsx
 // Página principal del marketplace
 // ═══════════════════════════════════════════════════════════
@@ -6,12 +6,13 @@ import { useState, useCallback, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../../utils/supabase/client';
 import { useProductos } from '../hooks/useProductos';
-import { agregarAlCarrito } from '../services/carritoApi';
+import { agregarAlCarrito } from '../services/carritoApi'; // re-export → app/services/carritoApi
 import { Navbar } from './Navbar';
 import { FlipCard } from './ProductCard';
 import { SlideCard } from './SHCard';
 import { CrossSellBar } from './CrossSellBar';
 import { LoginModal } from './LoginModal';
+import CarritoModule from '@core/carrito';
 import '../../styles/core-storefront.css';
 
 // ── Types ─────────────────────────────────────────────────
@@ -81,7 +82,7 @@ export default function MarketPage() {
         return exists ? prev : [...prev, item];
       });
       const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) await agregarAlCarrito(p.id, session.user.id, m);
+      if (session?.user) await agregarAlCarrito(String(p.id), m === 'sh' ? 'secondhand' : 'market', 1, pNum);
     } catch (err) {
       console.error('Error al agregar al carrito:', err);
     }
@@ -217,7 +218,7 @@ export default function MarketPage() {
           </>
         )}
 
-        {/* ── SECOND HAND ───────────────────────────── */}
+       {/* ── SECOND HAND ───────────────────────────── */}
         {isSH && (
           <>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
@@ -258,51 +259,53 @@ export default function MarketPage() {
 
       </main>
 
-      {/* Carrito */}
-      {showCart && (
-        <div className="core-cart-wrap">
-          <div className="core-cart-drop">
-            <div className="core-cart-list">
-              {cartItems.length === 0 ? (
-                <p style={{ padding: 16, color: '#7A7A7A', fontFamily: "Calibri, 'Segoe UI', sans-serif", fontSize: '0.85rem' }}>El carrito está vacío</p>
-              ) : (
-                cartItems.map(item => (
-                  <div key={`${item.id}-${item.m}`} className="core-cart-ci">
-                    <img src={item.img} alt={item.n} />
-                    <div>
-                      <span className={`core-cart-ptag ${item.m}`}>{item.m === 'mkt' ? 'Market' : 'S/H'}</span>
-                      <div className="core-cname">{item.n}</div>
-                      <div className="core-cprice">{item.p}</div>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-            {cartItems.length > 0 && (
-              <div className="core-cart-foot">
-                <div className="core-cart-foot-lbl">
-                  Total: {fmtNum(cartItems.reduce((s, i) => s + i.pNum, 0))}
-                </div>
-                <button onClick={() => navigate('/checkout')} style={{ background: '#1A4F9C', color: '#fff', border: 'none', borderRadius: 4, padding: '8px 16px', cursor: 'pointer', fontFamily: "Calibri, 'Segoe UI', sans-serif", fontWeight: 700, fontSize: '0.85rem' }}>
-                  Ir al checkout
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Carrito Modal */}
+{showCart && (
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,
+      zIndex: 1000,
+      display: "flex",
+      alignItems: "flex-start",
+      justifyContent: "flex-end",
+    }}
+  >
+    {/* Overlay */}
+    <div
+      onClick={() => setShowCart(false)}
+      style={{
+        position: "absolute",
+        inset: 0,
+        background: "rgba(0,0,0,0.45)",
+        backdropFilter: "blur(2px)",
+      }}
+    />
 
-      {/* Login Modal */}
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => {
-          setShowLoginModal(false);
-          window.history.replaceState({}, '', window.location.pathname);
-        }}
+    {/* Panel */}
+    <div
+      style={{
+        position: "relative",
+        zIndex: 1,
+        width: "100%",
+        maxWidth: 480,
+        height: "100dvh",
+        background: "#fff",
+        boxShadow: "-8px 0 32px rgba(0,0,0,0.18)",
+        overflowY: "auto",
+        animation: "slideInRight 0.25s ease",
+      }}
+    >
+      <CarritoModule
+        mode="embed"
+        apiUrl={import.meta.env.VITE_API_URL}
+        onClose={() => setShowCart(false)}
       />
-
     </div>
-  );
+  </div>
+)}   {/* ← CIERRE DEL showCart */}
+
+    </div>  
+
+  );  {/* ← CIERRE DEL RETURN */}
 }
-
-

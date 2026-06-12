@@ -1,6 +1,11 @@
 {
-  "installCommand": "pnpm install",
   "buildCommand": "pnpm --filter core-market build",
   "outputDirectory": "apps/core-market/dist",
-  "regions": ["iad1"]
+  "installCommand": "pnpm install",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }

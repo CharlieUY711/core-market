@@ -1,4 +1,4 @@
-/**
+﻿/**
  * AdminToolEditor.tsx — versión simplificada
  * El editor se monta directo, sin dropzone intermedia.
  * ToolEditor ya tiene su propio drag & drop interno.
@@ -80,7 +80,7 @@ export default function AdminToolEditor() {
       const { error: dbError } = await supabase.from("media_library").insert({
         bucket: "biblioteca", path, tipo: "imagen", nombre: fileName,
         size_bytes: blob.size, categoria: "articulo",
-        tags: ["editada", "tool-editor"], status: "active", user_id: user.id,
+        etiquetas: ["editada", "tool-editor"], status: "ready", user_id: user.id,
         metadata: { format },
       });
       if (dbError) throw dbError;

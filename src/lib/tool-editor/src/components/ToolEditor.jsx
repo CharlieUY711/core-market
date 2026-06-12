@@ -494,8 +494,8 @@ function ToolEditorInner({ initialImage, config: userConfig, onExport, onReady, 
           {/* Canvas — SIEMPRE en el DOM, solo oculto visualmente sin imagen */}
           <div style={{position:"relative", display: hasImage ? "flex" : "none", alignItems:"center", justifyContent:"center", width:"100%", height:"100%", overflow:"hidden"}}>
             <canvas ref={canvasRef}
-              style={{display:"block", maxWidth:"100%", maxHeight:"100%", width:"auto", height:"auto",
-                transform:`scale(${zoomLevel})`, transformOrigin:"center center", transition:"transform .1s",
+              style={{display:"block",
+                width:canvasDims.w*zoomLevel, height:canvasDims.h*zoomLevel,
                 cursor:TOOLS.find(t=>t.id===activeTool)?.cursor||"default"}}
               onMouseDown={onMD} onMouseMove={onMM} onMouseUp={onMU}/>
             {cropRect && (
