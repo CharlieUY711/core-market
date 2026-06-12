@@ -1,4 +1,7 @@
 {
+  "buildCommand": "pnpm --filter core-market build",
+  "outputDirectory": "apps/core-market/dist",
+  "installCommand": "pnpm install",
   "rewrites": [
     {
       "source": "/(.*)",
@@ -6,4 +9,3 @@
     }
   ]
 }
-
