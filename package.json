@@ -11,7 +11,7 @@
     "deploy:msg": "powershell -ExecutionPolicy Bypass -File scripts/deploy.ps1"
   },
   "dependencies": {
-    "@core/carrito": "workspace:*",
+    "@core/carrito": "file:../../packages/core-carrito",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
     "@imgly/background-removal": "^1.7.0",
@@ -99,3 +99,4 @@
     "react-dom": { "optional": true }
   }
 }
+
