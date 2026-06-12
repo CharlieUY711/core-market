@@ -146,11 +146,16 @@ function ToolEditorInner({ initialImage, config: userConfig, onExport, onReady, 
 
 
   const fitToView = useCallback((cw, ch) => {
-    const wrap = document.getElementById("ce-wrap");
-    if (!wrap) return;
-    const maxW = wrap.clientWidth - 40, maxH = wrap.clientHeight - 40;
-    setZoomLevel(Math.min(1, Math.min(maxW/cw, maxH/ch)));
-  }, []);
+    const tryFit = () => {
+      const wrap = document.getElementById("ce-wrap");
+      if (!wrap || !cw || !ch) return;
+      const maxW = (wrap.offsetWidth  || wrap.clientWidth)  - 40;
+      const maxH = (wrap.offsetHeight || wrap.clientHeight) - 40;
+      if (maxW <= 0 || maxH <= 0) { requestAnimationFrame(tryFit); return; }
+      setZoomLevel(Math.min(1, Math.min(maxW/cw, maxH/ch)));
+    };
+    requestAnimationFrame(tryFit);
+  }, [setZoomLevel]);
 
   // ─── FIX #1: saveSnap con ref para evitar stale histIdx ──────────────────
   const saveSnap = useCallback((canvas) => {
@@ -487,9 +492,10 @@ function ToolEditorInner({ initialImage, config: userConfig, onExport, onReady, 
           )}
 
           {/* Canvas — SIEMPRE en el DOM, solo oculto visualmente sin imagen */}
-          <div style={{position:"relative", display: hasImage ? "flex" : "none", alignItems:"center", justifyContent:"center", width:"100%", height:"100%"}}>
+          <div style={{position:"relative", display: hasImage ? "flex" : "none", alignItems:"center", justifyContent:"center", width:"100%", height:"100%", overflow:"hidden"}}>
             <canvas ref={canvasRef}
               style={{display:"block", maxWidth:"100%", maxHeight:"100%", width:"auto", height:"auto",
+                transform:`scale(${zoomLevel})`, transformOrigin:"center center", transition:"transform .1s",
                 cursor:TOOLS.find(t=>t.id===activeTool)?.cursor||"default"}}
               onMouseDown={onMD} onMouseMove={onMM} onMouseUp={onMU}/>
             {cropRect && (
