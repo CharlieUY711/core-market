@@ -16,7 +16,7 @@ import { S, FILTERS, TOOLS, ASPECT_PRESETS, SOCIAL_PRESETS } from "../design/des
 import { useEditorState } from "../state/useEditorState.js";
 import { ToolEditorErrorBoundary } from "../lifecycle/useEditorLifecycle.jsx";
 import { validateConfig } from "../contract/toolContract.js";
-import {
+import { applyPixelAdjustments,
   bakeFilterToPixels,
   estimateFileSize,
   removeBackgroundAI as engineRemoveBgAI,
@@ -32,13 +32,18 @@ import EffectsPanel from "./effects/EffectsPanel.jsx";
 // ─── Sub-componentes ──────────────────────────────────────────────────────────
 
 function SliderRow({ label, id, min=-100, max=100, value, onChange }) {
+  const pct   = ((value - min) / (max - min)) * 100;
+  const color = value !== 0 ? "#1A4F9C" : "#C8D5E8";
+  const track = `linear-gradient(to right, ${color} ${pct}%, #E8EDF5 ${pct}%)`;
   return (
     <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:5 }}>
-      <span style={{ fontSize:10, color:"#777", width:72, flexShrink:0 }}>{label}</span>
+      <span style={{ fontSize:11, color:"#7A7A7A", width:76, flexShrink:0 }}>{label}</span>
       <input type="range" min={min} max={max} value={value}
         onChange={e => onChange(id, parseInt(e.target.value))}
-        style={{ flex:1, accentColor:"#00d4aa", cursor:"pointer" }} />
-      <span style={{ fontSize:10, color:"#00d4aa", width:26, textAlign:"right", flexShrink:0 }}>{value}</span>
+        style={{ flex:1, accentColor:color, cursor:"pointer",
+                 background:track, borderRadius:4, height:3,
+                 WebkitAppearance:"none", appearance:"none" }} />
+      <span style={{ fontSize:11, color:color, width:28, textAlign:"right", flexShrink:0, fontWeight:600 }}>{value}</span>
     </div>
   );
 }
